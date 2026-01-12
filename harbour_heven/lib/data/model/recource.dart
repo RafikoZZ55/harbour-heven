@@ -2,9 +2,9 @@
 import 'package:harbour_heven/data/model/recource_type.dart';
 
 class Recource {
-  Recourcetype type;
-  double quantity;
-  double capacity;
+  final Recourcetype type;
+  int quantity;
+  int capacity;
 
   Recource({
     required this.type,

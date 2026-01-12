@@ -1,9 +1,11 @@
 
+import 'package:harbour_heven/data/model/recource_type.dart';
+
 abstract class Building {
 int level;
-String name;
-double price;
-String description;
+final String name;
+final Map<Recourcetype, int> price;
+final String description;
 
 Building({
   required this.level,
@@ -12,6 +14,6 @@ Building({
   required this.price,
 });
 
-double calculateNextLevelCost();
+Map<Recourcetype, int> upgradeCost();
 
 }
