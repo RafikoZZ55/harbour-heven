@@ -6,12 +6,18 @@ import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/voyage/voyage.dart';
 
 class VoyagePort extends Building {
-  late List<Voyage> currentVoyages;
-  late Map<VoyageShipType, int> voyageShips;
+  List<Voyage> currentVoyages;
+  Map<VoyageShipType, int> voyageShips;
   int voyageQueeSize;
 
-  VoyagePort({int? level}):
+  VoyagePort({int? level, Map<VoyageShipType, int>? voyageShips, List<Voyage>? currentVoyages}):
   voyageQueeSize = 2 + (1* (level ?? 1 / 3).floor()),
+  voyageShips = {
+    VoyageShipType.barteringShip: voyageShips?[VoyageShipType.barteringShip] ?? 0,
+    VoyageShipType.heavyShip: voyageShips?[VoyageShipType.heavyShip] ?? 0,
+    VoyageShipType.lightShip: voyageShips?[VoyageShipType.lightShip] ?? 0
+  },
+  currentVoyages = currentVoyages ?? [],
   super(
     level: level ?? 1,
     type: BuildingType.voyagePort,
