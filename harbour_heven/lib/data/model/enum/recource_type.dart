@@ -1,7 +1,7 @@
 
-enum Recourcetype {
+enum RecourceType {
   fish,
   wood,
   gold,
-  stone
+  stone;
 }

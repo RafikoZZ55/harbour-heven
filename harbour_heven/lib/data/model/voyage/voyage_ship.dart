@@ -7,7 +7,7 @@ abstract class VoyageShip {
   final String description;
   final double returnRate;
   final double basePoints;
-  final Map<Recourcetype,int> price;
+  final Map<RecourceType,int> price;
 
   VoyageShip({
     required this.type,

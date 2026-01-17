@@ -2,7 +2,7 @@ import 'package:harbour_heven/data/model/building/building.dart';
 import 'package:harbour_heven/data/model/enum/recource_type.dart';
 
 abstract class Generator extends Building{
-  Recourcetype recourcetype;
+  RecourceType recourcetype;
   Generator({
     required super.level,
     required super.type,
@@ -11,6 +11,6 @@ abstract class Generator extends Building{
     required super.price,
   });
 
-  Map<Recourcetype, double> generateRecources();
+  Map<RecourceType, double> generateRecources();
   
 }

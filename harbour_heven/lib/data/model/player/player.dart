@@ -5,7 +5,7 @@ import 'package:harbour_heven/data/model/enum/recource_type.dart';
 
 class Player {
 List<Building> buildings;
-Map<Recourcetype, Recource> recources;
+Map<RecourceType, Recource> recources;
 
 Player({
   required this.buildings,

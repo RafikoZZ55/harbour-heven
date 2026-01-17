@@ -9,18 +9,18 @@ class Quarry extends Generator{
     level: level ?? 1,
     type: BuildingType.quarry,
     description: "a stone quarry that generates stone",
-    recourcetype: Recourcetype.stone,
-    price: <Recourcetype,int>{Recourcetype.fish: 15}
+    recourcetype: RecourceType.stone,
+    price: <RecourceType,int>{RecourceType.fish: 15}
   );
 
   @override
-  Map<Recourcetype, double> generateRecources() {
+  Map<RecourceType, double> generateRecources() {
     // TODO: implement generateRecources
     throw UnimplementedError();
   }
 
   @override
-  Map<Recourcetype, int> upgradeCost() {
+  Map<RecourceType, int> upgradeCost() {
     // TODO: implement upgradeCost
     throw UnimplementedError();
   }

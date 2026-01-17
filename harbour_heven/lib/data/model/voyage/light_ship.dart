@@ -9,6 +9,6 @@ class LightShip extends VoyageShip {
     description: "light, fast and cheap but has low chance of surviving a voyage",
     returnRate: 0.75,
     basePoints: 100,
-    price: <Recourcetype, int>{Recourcetype.wood: 75, Recourcetype.fish: 25}
+    price: <RecourceType, int>{RecourceType.wood: 75, RecourceType.fish: 25}
   );
 }

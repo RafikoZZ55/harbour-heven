@@ -22,11 +22,11 @@ class VoyagePort extends Building {
     level: level ?? 1,
     type: BuildingType.voyagePort,
     description: "a port for voyage",
-    price: <Recourcetype,int>{}
+    price: <RecourceType,int>{}
   );
   
   @override
-  Map<Recourcetype, int> upgradeCost() {
+  Map<RecourceType, int> upgradeCost() {
     // TODO: implement upgradeCost
     throw UnimplementedError();
   }

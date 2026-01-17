@@ -11,6 +11,6 @@ extension RecourceOperators on Recource {
   }
 
   bool hasEnough({required int amount}) {
-    return amount >= quantity;
+    return amount <= quantity;
   }
 }

@@ -1,5 +1,5 @@
 enum VoyageShipType {
   lightShip,
   heavyShip,
-  barteringShip,
+  barteringShip;
 }

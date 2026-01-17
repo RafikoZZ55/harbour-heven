@@ -11,7 +11,7 @@ class BarteringShip extends VoyageShip {
     type: VoyageShipType.barteringShip,
     description: "doest fight, just transports cargo but be carfull to not add them to much cuz they can make you a bigger target",
     returnRate: 0.9,
-    basePoints: -75,
-    price: <Recourcetype, int>{Recourcetype.wood: 75, Recourcetype.fish: 15, Recourcetype.gold: 35}
+    basePoints: -50,
+    price: <RecourceType, int>{RecourceType.wood: 75, RecourceType.fish: 15, RecourceType.gold: 35}
   );
 }

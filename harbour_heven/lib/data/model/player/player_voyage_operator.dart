@@ -4,6 +4,7 @@ import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/enum/difficulty.dart';
 import 'package:harbour_heven/data/model/enum/recource_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
+import 'package:harbour_heven/data/model/enum/voyage_type.dart';
 import 'package:harbour_heven/data/model/player/player.dart';
 import 'package:harbour_heven/data/model/player/player_recources_operator.dart';
 import 'package:harbour_heven/data/model/voyage/bartering_ship.dart';
@@ -14,7 +15,7 @@ import 'package:harbour_heven/data/model/voyage/voyage.dart';
 extension PlayerVoyageOperator on Player {
 
   VoyagePort _getVoyagePort() {
-    return buildings.singleWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
+    return buildings.firstWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
   }
 
   int _calculateVoyageQueeSize(){
@@ -27,7 +28,7 @@ extension PlayerVoyageOperator on Player {
     return totalBasePoints;
   }
 
-  Map<Recourcetype, int> _getVoyageShipPrice({required VoyageShipType type}){
+  Map<RecourceType, int> _getVoyageShipPrice({required VoyageShipType type}){
     switch (type){
       case VoyageShipType.barteringShip: return BarteringShip().price;
       case VoyageShipType.lightShip: return LightShip().price;
@@ -43,12 +44,83 @@ extension PlayerVoyageOperator on Player {
     }
   }
 
+  Difficulty _calculateVoyageDifficulty(){
+    int tavernLevel = buildingLevel(buildingType: BuildingType.tawern);
+    double roll = Random().nextDouble();
+    double easyChance;
+    double mediumChance;
+    double hardChance;
+
+    if(tavernLevel <= 3) {
+      easyChance = 1;
+      mediumChance = 0;
+      hardChance = 0;
+    }
+    else if (tavernLevel <= 6){
+      easyChance = 0.3;
+      mediumChance = 0.6;
+      hardChance = 0.1;
+    }
+    else if (tavernLevel <= 9){
+      easyChance = 0.1;
+      mediumChance = 0.3;
+      hardChance = 0.5;
+    }
+    else {
+      easyChance = 0;
+      mediumChance = 0.2;
+      hardChance = 0.3;
+    }
+
+    if(roll <= easyChance) {return Difficulty.easy;}
+    else if (roll <= mediumChance + easyChance) {return Difficulty.medium;}
+    else if (roll <= hardChance + mediumChance + hardChance) {return Difficulty.hard;}
+    else {return Difficulty.extreme;}
+  }
+
+  Map<RecourceType, int> _calculateVoyageRecources({required VoyageType voyageType, required Difficulty difficulty}) {
+    int voyagePortLevel = _getVoyagePort().level;
+    int baseRecources = 100 + 200 * voyagePortLevel + 250 * (difficulty.index + 1) + Random().nextInt((12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
+    int fixedBonus = 100 * (difficulty.index + 1) + 75 * voyagePortLevel;
+    Map<RecourceType,int> recources = {
+      RecourceType.wood: 0,
+      RecourceType.fish: 0,
+      RecourceType.stone: 0,
+      RecourceType.gold: 0,
+    };
+
+    for(RecourceType recource in voyageType.recources){
+      recources[recource] = fixedBonus;
+    }
+
+    final List<RecourceType> activeRecuorces = voyageType.recources.toList();
+    while(baseRecources - recources.values.reduce((value, element) => value + element) > 0){
+      RecourceType selectedRecource = activeRecuorces[Random().nextInt(activeRecuorces.length)];
+
+      recources[selectedRecource] = min(
+        baseRecources - recources.values.reduce((value, element) => value + element), 
+        (recources[selectedRecource] ?? 0) + Random().nextInt(((baseRecources - recources.values.reduce((value, element) => value + element) / 1.5).toInt()) + 10)
+      );
+    }
+
+    return recources;
+  }
+
+  int _calculateVoyageSuccesThreshold({required Difficulty difficulty}){
+      int tawernLevel = buildingLevel(buildingType: BuildingType.tawern);
+      return 250 + 225 * tawernLevel + 100 * pow(2, difficulty.index + 1).toInt();
+      
+  }
+
   Voyage generateVoyage(){
-    //TODO: - make it work
+    VoyageType voyageType = VoyageType.getRandom();
+    Difficulty difficulty = _calculateVoyageDifficulty();
+
     return Voyage(
-      difficulty: Difficulty.easy, 
-      recources: {Recourcetype.fish: 1200}, 
-      successThreshold: 750 + (buildingLevel(buildingType: BuildingType.tawern) * 250 )
+      type: voyageType,
+      difficulty: difficulty, 
+      recources: _calculateVoyageRecources(voyageType: voyageType, difficulty: difficulty), 
+      successThreshold: _calculateVoyageSuccesThreshold(difficulty: difficulty)
     );
   }
 
@@ -58,7 +130,7 @@ extension PlayerVoyageOperator on Player {
   }
 
   void reRollVoyages(){
-    Map<Recourcetype,int> cost = {Recourcetype.gold: 5};
+    Map<RecourceType,int> cost = {RecourceType.gold: 5};
     if(hasEnoughRecources(recources: cost)){
       spendRecources(recources: cost);
       generateVoyages();
@@ -92,9 +164,3 @@ extension PlayerVoyageOperator on Player {
   }
 
 }
-
-
-
-
-
-

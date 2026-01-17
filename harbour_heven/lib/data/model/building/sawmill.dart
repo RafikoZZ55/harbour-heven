@@ -10,20 +10,20 @@ class Sawmill extends Generator {
     level: level ?? 1,
     type: BuildingType.sawmill,
     description: "Place where you cut wood",
-    recourcetype: Recourcetype.wood,
-    price: <Recourcetype,int>{}
+    recourcetype: RecourceType.wood,
+    price: <RecourceType,int>{}
   );
 
 
 
   @override
-  Map<Recourcetype, double> generateRecources() {
+  Map<RecourceType, double> generateRecources() {
     // TODO: implement generateRecources
     throw UnimplementedError();
   }
 
   @override
-  Map<Recourcetype, int> upgradeCost() {
+  Map<RecourceType, int> upgradeCost() {
     // TODO: implement upgradeCost
     throw UnimplementedError();
   }

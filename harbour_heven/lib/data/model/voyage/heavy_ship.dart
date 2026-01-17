@@ -10,6 +10,6 @@ class HeavyShip extends VoyageShip {
     description: "unsinkable and powerfull but pricy. Great for long runs",
     returnRate: 1,
     basePoints: 125,
-    price: <Recourcetype,int>{Recourcetype.wood: 200, Recourcetype.fish: 50, Recourcetype.gold: 20}
+    price: <RecourceType,int>{RecourceType.wood: 200, RecourceType.fish: 50, RecourceType.gold: 20}
   );
 }

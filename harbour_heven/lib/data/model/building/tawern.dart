@@ -9,12 +9,12 @@ class Tawern extends Building {
     level: level ?? 1,
     description: "Increses capacity and lets you get progers",
     type: BuildingType.tawern,
-    price: <Recourcetype,int>{}
+    price: <RecourceType,int>{}
   );
 
 
   @override
-  Map<Recourcetype, int> upgradeCost() {
+  Map<RecourceType, int> upgradeCost() {
     // TODO: implement upgradeCost
     throw UnimplementedError();
   }

@@ -11,18 +11,18 @@ class FishingDock extends Generator {
     level: level ?? 1, 
     type: BuildingType.fishingDock,
     description: "basic description for a fishing dock",
-    price: <Recourcetype,int>{Recourcetype.fish: 10},
-    recourcetype: Recourcetype.fish
+    price: <RecourceType,int>{RecourceType.fish: 10},
+    recourcetype: RecourceType.fish
   );
 
   @override
-  Map<Recourcetype, double> generateRecources() {
+  Map<RecourceType, double> generateRecources() {
     // TODO: implement generateRecources
     throw UnimplementedError();
   }
 
   @override
-  Map<Recourcetype, int> upgradeCost() {
+  Map<RecourceType, int> upgradeCost() {
     // TODO: implement upgradeCost
     throw UnimplementedError();
   }

@@ -5,7 +5,7 @@ import 'package:harbour_heven/data/model/enum/recource_type.dart';
 abstract class Building {
 int level;
 final BuildingType type;
-final Map<Recourcetype, int> price;
+final Map<RecourceType, int> price;
 final String description;
 
 Building({
@@ -15,6 +15,6 @@ Building({
   required this.price,
 });
 
-Map<Recourcetype, int> upgradeCost();
+Map<RecourceType, int> upgradeCost();
 
 }
