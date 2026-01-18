@@ -1,5 +1,7 @@
 
 
+import 'dart:math';
+
 import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/building/generator.dart';
 import 'package:harbour_heven/data/model/enum/recource_type.dart';
@@ -17,15 +19,17 @@ class Sawmill extends Generator {
 
 
   @override
-  Map<RecourceType, double> generateRecources() {
-    // TODO: implement generateRecources
-    throw UnimplementedError();
+  Map<RecourceType, int> calculateRecourcesPerCycle() {
+    return {RecourceType.wood: 2 * level};
   }
 
   @override
   Map<RecourceType, int> upgradeCost() {
-    // TODO: implement upgradeCost
-    throw UnimplementedError();
+    Map<RecourceType,int> cost = {
+      RecourceType.stone: 200 + 5 * pow(2, level).toInt(),
+      RecourceType.fish: (150 + 2.5 * pow(2, level)).toInt(),
+    };
+    return cost;
   }
 
 }

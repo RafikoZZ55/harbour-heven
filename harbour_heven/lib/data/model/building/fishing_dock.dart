@@ -1,12 +1,10 @@
-
-
+import 'dart:math';
 import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/building/generator.dart';
 import 'package:harbour_heven/data/model/enum/recource_type.dart';
 
 class FishingDock extends Generator {
   FishingDock({int? level}):
-  assert((level ?? 1) >=1,"level must be bigger or equal to one"),
   super(
     level: level ?? 1, 
     type: BuildingType.fishingDock,
@@ -16,15 +14,18 @@ class FishingDock extends Generator {
   );
 
   @override
-  Map<RecourceType, double> generateRecources() {
-    // TODO: implement generateRecources
-    throw UnimplementedError();
+  Map<RecourceType, int> calculateRecourcesPerCycle() {
+    return {RecourceType.fish: 2 * level};
   }
 
   @override
   Map<RecourceType, int> upgradeCost() {
-    // TODO: implement upgradeCost
-    throw UnimplementedError();
+    Map<RecourceType,int> cost = {
+      RecourceType.stone: (10 + 2.5 * pow(2, level)).toInt(),
+      RecourceType.wood: 200 + 5 * pow(2, level).toInt()
+    };
+    return cost;
   }
+  
 
 }

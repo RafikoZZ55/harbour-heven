@@ -11,6 +11,6 @@ abstract class Generator extends Building{
     required super.price,
   });
 
-  Map<RecourceType, double> generateRecources();
+  Map<RecourceType, int> calculateRecourcesPerCycle();
   
 }

@@ -13,7 +13,7 @@ Building({
   required this.type,
   required this.description,
   required this.price,
-});
+}): assert((level) >=1,"level must be bigger or equal to one");
 
 Map<RecourceType, int> upgradeCost();
 

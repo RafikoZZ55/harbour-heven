@@ -5,6 +5,7 @@ import 'package:harbour_heven/data/model/enum/difficulty.dart';
 import 'package:harbour_heven/data/model/enum/recource_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_type.dart';
+import 'package:harbour_heven/data/model/player/operators/player_building_operator.dart';
 import 'package:harbour_heven/data/model/player/player.dart';
 import 'package:harbour_heven/data/model/player/operators/player_recources_operator.dart';
 import 'package:harbour_heven/data/model/voyage/bartering_ship.dart';
@@ -15,7 +16,7 @@ import 'package:harbour_heven/data/model/voyage/voyage.dart';
 extension PlayerVoyageOperator on Player {
 
   VoyagePort _getVoyagePort() {
-    return buildings.firstWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
+    return buildings[BuildingType.voyagePort] as VoyagePort;
   }
 
   int _calculateVoyageQueeSize(){

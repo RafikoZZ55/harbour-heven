@@ -3,17 +3,9 @@ import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/enum/recource_type.dart';
 
 class Player {
-List<Building> buildings;
+Map<BuildingType,Building> buildings;
 Map<RecourceType, int> recources;
 
-
-Player({
-  required this.buildings,
-  required this.recources
-});
-
-int buildingLevel({required BuildingType buildingType}) {
-  return buildings.singleWhere((b) => b.type == buildingType).level;
-}
+Player({required this.buildings, required this.recources});
 
 }
