@@ -6,7 +6,7 @@ import 'package:harbour_heven/data/model/enum/recource_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_type.dart';
 import 'package:harbour_heven/data/model/player/player.dart';
-import 'package:harbour_heven/data/model/player/player_recources_operator.dart';
+import 'package:harbour_heven/data/model/player/operators/player_recources_operator.dart';
 import 'package:harbour_heven/data/model/voyage/bartering_ship.dart';
 import 'package:harbour_heven/data/model/voyage/heavy_ship.dart';
 import 'package:harbour_heven/data/model/voyage/light_ship.dart';
