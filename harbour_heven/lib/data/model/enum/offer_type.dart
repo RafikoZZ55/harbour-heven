@@ -92,4 +92,12 @@ enum OfferType {
     final values = OfferType.values;
     return values[Random().nextInt(values.length)];
   }
+
+  static bool checkIfExists({required String offerType}){
+    return OfferType.values.any((e) => e.name == offerType);
+  }
+
+  OfferType get({required String offerType}){
+    return OfferType.values.singleWhere((e) => e.name == offerType);
+  }  
 }

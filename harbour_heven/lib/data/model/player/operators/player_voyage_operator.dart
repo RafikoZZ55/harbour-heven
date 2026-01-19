@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/model/enum/building_type.dart';
-import 'package:harbour_heven/data/model/enum/difficulty.dart';
+import 'package:harbour_heven/data/model/enum/difficulty_type.dart';
 import 'package:harbour_heven/data/model/enum/recource_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_type.dart';
@@ -45,7 +45,7 @@ extension PlayerVoyageOperator on Player {
     }
   }
 
-  Difficulty _calculateVoyageDifficulty(){
+  DifficultyType _calculateVoyageDifficulty(){
     int tavernLevel = buildingLevel(buildingType: BuildingType.tawern);
     double roll = Random().nextDouble();
     double easyChance;
@@ -73,13 +73,13 @@ extension PlayerVoyageOperator on Player {
       hardChance = 0.3;
     }
 
-    if(roll <= easyChance) {return Difficulty.easy;}
-    else if (roll <= mediumChance + easyChance) {return Difficulty.medium;}
-    else if (roll <= hardChance + mediumChance + hardChance) {return Difficulty.hard;}
-    else {return Difficulty.extreme;}
+    if(roll <= easyChance) {return DifficultyType.easy;}
+    else if (roll <= mediumChance + easyChance) {return DifficultyType.medium;}
+    else if (roll <= hardChance + mediumChance + hardChance) {return DifficultyType.hard;}
+    else {return DifficultyType.extreme;}
   }
 
-  Map<RecourceType, int> _calculateVoyageRecources({required VoyageType voyageType, required Difficulty difficulty}) {
+  Map<RecourceType, int> _calculateVoyageRecources({required VoyageType voyageType, required DifficultyType difficulty}) {
     int voyagePortLevel = _getVoyagePort().level;
     int baseRecources = 100 + 200 * voyagePortLevel + 250 * (difficulty.index + 1) + Random().nextInt((12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
     int fixedBonus = 100 * (difficulty.index + 1) + 75 * voyagePortLevel;
@@ -107,7 +107,7 @@ extension PlayerVoyageOperator on Player {
     return recources;
   }
 
-  int _calculateVoyageSuccesThreshold({required Difficulty difficulty}){
+  int _calculateVoyageSuccesThreshold({required DifficultyType difficulty}){
       int tawernLevel = buildingLevel(buildingType: BuildingType.tawern);
       return 250 + 225 * tawernLevel + 100 * pow(2, difficulty.index + 1).toInt();
       
@@ -115,7 +115,7 @@ extension PlayerVoyageOperator on Player {
 
   Voyage generateVoyage(){
     VoyageType voyageType = VoyageType.getRandom();
-    Difficulty difficulty = _calculateVoyageDifficulty();
+    DifficultyType difficulty = _calculateVoyageDifficulty();
 
     return Voyage(
       type: voyageType,

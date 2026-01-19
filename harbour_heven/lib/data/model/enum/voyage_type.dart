@@ -22,4 +22,12 @@ enum VoyageType {
   }
 
   bool gives(RecourceType recource) => recources.contains(recource);
+
+  static bool checkIfExists({required String voyageType}){
+    return VoyageType.values.any((e) => e.name == voyageType);
+  }
+
+  VoyageType get({required String voyageType}){
+    return VoyageType.values.singleWhere((e) => e.name == voyageType);
+  }  
 }

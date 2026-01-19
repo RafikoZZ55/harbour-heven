@@ -24,6 +24,10 @@ extension PlayerOfferOperator on Player {
     return (250 + 100 * (buildingLevel(buildingType: BuildingType.tradingPort)));
   }
 
+  int _claculeteOfferQueeSize(){
+    return 2 + (1* (_getTradingPort().level / 3).floor());
+  }
+
   Map<RecourceType,int> _calculateOfferRewards({required OfferType offerType}) {
     final int size = (_calculateRewardSize() * _calculateOfferMultiplier()).toInt();
     final tawernLevel = buildingLevel(buildingType: BuildingType.tawern);
@@ -72,7 +76,7 @@ extension PlayerOfferOperator on Player {
 
   void generateOffers() {
     final port = _getTradingPort();
-    List<Offer> offers = List.generate(port.offerQueeSize, (_) => _generateOffer());
+    List<Offer> offers = List.generate(_claculeteOfferQueeSize(), (_) => _generateOffer());
     port.currentOffers = offers;
   }
 
