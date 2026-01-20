@@ -18,26 +18,29 @@ class BuildingStateAdapter extends TypeAdapter<BuildingState> {
     };
     return BuildingState(
       level: fields[0] as int,
-      currentVoyages: (fields[1] as List?)?.cast<VoyageState>(),
-      voyageShips: (fields[2] as Map?)?.cast<String, int>(),
-      currentOffers: (fields[4] as List?)?.cast<OfferState>(),
-      reputation: fields[3] as double?,
+      type: fields[1] as String,
+      currentVoyages: (fields[2] as List?)?.cast<VoyageState>(),
+      voyageShips: (fields[3] as Map?)?.cast<String, int>(),
+      currentOffers: (fields[5] as List?)?.cast<OfferState>(),
+      reputation: fields[4] as double?,
     );
   }
 
   @override
   void write(BinaryWriter writer, BuildingState obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.level)
       ..writeByte(1)
-      ..write(obj.currentVoyages)
+      ..write(obj.type)
       ..writeByte(2)
-      ..write(obj.voyageShips)
+      ..write(obj.currentVoyages)
       ..writeByte(3)
-      ..write(obj.reputation)
+      ..write(obj.voyageShips)
       ..writeByte(4)
+      ..write(obj.reputation)
+      ..writeByte(5)
       ..write(obj.currentOffers);
   }
 

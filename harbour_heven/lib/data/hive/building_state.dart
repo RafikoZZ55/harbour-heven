@@ -9,22 +9,26 @@ class BuildingState {
   @HiveField(0)
   int level;
 
-  //voyage_port
   @HiveField(1)
+  String type;
+
+  //voyage_port
+  @HiveField(2)
   List<VoyageState>? currentVoyages;
 
-  @HiveField(2)
+  @HiveField(3)
   Map<String, int>? voyageShips;
 
   //trading_port
-  @HiveField(3)
+  @HiveField(4)
   double? reputation;
 
-  @HiveField(4)
+  @HiveField(5)
   List<OfferState>? currentOffers;
 
   BuildingState({
     required this.level,
+    required this.type,
     this.currentVoyages,
     this.voyageShips,
     this.currentOffers,

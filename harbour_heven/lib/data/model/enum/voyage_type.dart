@@ -27,7 +27,7 @@ enum VoyageType {
     return VoyageType.values.any((e) => e.name == voyageType);
   }
 
-  VoyageType get({required String voyageType}){
+  static VoyageType get({required String voyageType}){
     return VoyageType.values.singleWhere((e) => e.name == voyageType);
   }  
 }

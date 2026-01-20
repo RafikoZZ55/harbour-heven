@@ -12,7 +12,7 @@ enum BuildingType {
     return BuildingType.values.any((e) => e.name == buildingType);
   }
 
-  BuildingType get({required String buildingType}){
+  static BuildingType get({required String buildingType}){
     return BuildingType.values.singleWhere((e) => e.name == buildingType);
   }
 }

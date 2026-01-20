@@ -97,7 +97,7 @@ enum OfferType {
     return OfferType.values.any((e) => e.name == offerType);
   }
 
-  OfferType get({required String offerType}){
+  static OfferType get({required String offerType}){
     return OfferType.values.singleWhere((e) => e.name == offerType);
   }  
 }

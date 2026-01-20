@@ -17,7 +17,7 @@ class PlayerStateAdapter extends TypeAdapter<PlayerState> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PlayerState(
-      buildings: (fields[0] as Map).cast<String, BuildingState>(),
+      buildings: (fields[0] as List).cast<BuildingState>(),
       recources: (fields[1] as Map).cast<String, int>(),
     );
   }

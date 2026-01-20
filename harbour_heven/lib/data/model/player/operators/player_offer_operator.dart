@@ -1,18 +1,9 @@
-import 'dart:math';
-import 'package:harbour_heven/data/model/barghter/offer.dart';
-import 'package:harbour_heven/data/model/building/trading_port.dart';
-import 'package:harbour_heven/data/model/enum/building_type.dart';
-import 'package:harbour_heven/data/model/enum/offer_type.dart';
-import 'package:harbour_heven/data/model/enum/recource_type.dart';
-import 'package:harbour_heven/data/model/player/operators/player_building_operator.dart';
-import 'package:harbour_heven/data/model/player/player.dart';
-import 'package:harbour_heven/data/model/player/operators/player_recources_operator.dart';
+part of '../player.dart';
 
 extension PlayerOfferOperator on Player {
-  Random get _random => Random();
 
   TradingPort _getTradingPort() {
-    return buildings[BuildingType.tradingPort] as TradingPort;
+    return buildings.firstWhere((b) => b.type == BuildingType.tradingPort) as TradingPort;
   }
 
   double _calculateOfferMultiplier() {

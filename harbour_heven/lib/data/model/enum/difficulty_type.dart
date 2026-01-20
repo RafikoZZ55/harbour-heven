@@ -8,7 +8,7 @@ enum DifficultyType {
     return DifficultyType.values.any((e) => e.name == difficultyType);
   }
 
-  DifficultyType get({required String difficultyType}){
+  static DifficultyType get({required String difficultyType}){
     return DifficultyType.values.singleWhere((e) => e.name == difficultyType);
   }  
 }

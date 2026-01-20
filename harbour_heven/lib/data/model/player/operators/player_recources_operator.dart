@@ -1,8 +1,4 @@
-import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart';
-import 'package:harbour_heven/data/model/enum/building_type.dart';
-import 'package:harbour_heven/data/model/enum/recource_type.dart';
-import 'package:harbour_heven/data/model/player/operators/player_building_operator.dart';
-import 'package:harbour_heven/data/model/player/player.dart';
+part of '../player.dart';
 
 extension PlayerRecourcesOperator on Player {
 

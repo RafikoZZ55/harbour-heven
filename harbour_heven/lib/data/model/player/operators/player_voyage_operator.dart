@@ -1,22 +1,9 @@
-import 'dart:math';
-import 'package:harbour_heven/data/model/building/voyage_port.dart';
-import 'package:harbour_heven/data/model/enum/building_type.dart';
-import 'package:harbour_heven/data/model/enum/difficulty_type.dart';
-import 'package:harbour_heven/data/model/enum/recource_type.dart';
-import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
-import 'package:harbour_heven/data/model/enum/voyage_type.dart';
-import 'package:harbour_heven/data/model/player/operators/player_building_operator.dart';
-import 'package:harbour_heven/data/model/player/player.dart';
-import 'package:harbour_heven/data/model/player/operators/player_recources_operator.dart';
-import 'package:harbour_heven/data/model/voyage/bartering_ship.dart';
-import 'package:harbour_heven/data/model/voyage/heavy_ship.dart';
-import 'package:harbour_heven/data/model/voyage/light_ship.dart';
-import 'package:harbour_heven/data/model/voyage/voyage.dart';
+part of '../player.dart';
 
 extension PlayerVoyageOperator on Player {
 
   VoyagePort _getVoyagePort() {
-    return buildings[BuildingType.voyagePort] as VoyagePort;
+    return buildings.firstWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
   }
 
   int _calculateVoyageQueeSize(){
@@ -24,30 +11,17 @@ extension PlayerVoyageOperator on Player {
   }
 
   int _calculateFleetBasePoints(){
+    VoyagePort voyagePort = _getVoyagePort();
     int totalBasePoints = 0;
-    for(int basePoints in _getVoyagePort().voyageShips.values) {totalBasePoints += basePoints;}
+    for(VoyageShipType voyageShipType in voyagePort.voyageShips.keys) {
+      totalBasePoints += (voyagePort.voyageShips[voyageShipType] ?? 0) * voyageShipType.basePoints;
+    }
     return totalBasePoints;
-  }
-
-  Map<RecourceType, int> _getVoyageShipPrice({required VoyageShipType type}){
-    switch (type){
-      case VoyageShipType.barteringShip: return BarteringShip().price;
-      case VoyageShipType.lightShip: return LightShip().price;
-      case VoyageShipType.heavyShip: return HeavyShip().price;
-    }
-  }
-
-  double _getVoyageShipReturnRate({required VoyageShipType type}){
-    switch (type){
-      case VoyageShipType.barteringShip: return BarteringShip().returnRate;
-      case VoyageShipType.lightShip: return LightShip().returnRate;
-      case VoyageShipType.heavyShip: return HeavyShip().returnRate;
-    }
   }
 
   DifficultyType _calculateVoyageDifficulty(){
     int tavernLevel = buildingLevel(buildingType: BuildingType.tawern);
-    double roll = Random().nextDouble();
+    double roll = _random.nextDouble();
     double easyChance;
     double mediumChance;
     double hardChance;
@@ -81,7 +55,7 @@ extension PlayerVoyageOperator on Player {
 
   Map<RecourceType, int> _calculateVoyageRecources({required VoyageType voyageType, required DifficultyType difficulty}) {
     int voyagePortLevel = _getVoyagePort().level;
-    int baseRecources = 100 + 200 * voyagePortLevel + 250 * (difficulty.index + 1) + Random().nextInt((12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
+    int baseRecources = 100 + 200 * voyagePortLevel + 250 * (difficulty.index + 1) + _random.nextInt((12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
     int fixedBonus = 100 * (difficulty.index + 1) + 75 * voyagePortLevel;
     Map<RecourceType,int> recources = {
       RecourceType.wood: 0,
@@ -96,11 +70,11 @@ extension PlayerVoyageOperator on Player {
 
     final List<RecourceType> activeRecuorces = voyageType.recources.toList();
     while(baseRecources - recources.values.reduce((value, element) => value + element) > 0){
-      RecourceType selectedRecource = activeRecuorces[Random().nextInt(activeRecuorces.length)];
+      RecourceType selectedRecource = activeRecuorces[_random.nextInt(activeRecuorces.length)];
 
       recources[selectedRecource] = min(
         baseRecources - recources.values.reduce((value, element) => value + element), 
-        (recources[selectedRecource] ?? 0) + Random().nextInt(((baseRecources - recources.values.reduce((value, element) => value + element) / 1.5).toInt()) + 10)
+        (recources[selectedRecource] ?? 0) + _random.nextInt(((baseRecources - recources.values.reduce((value, element) => value + element) / 1.5).toInt()) + 10)
       );
     }
 
@@ -139,8 +113,8 @@ extension PlayerVoyageOperator on Player {
   }
 
   void buyVoyageShip({required VoyageShipType type}){
-    if(hasEnoughRecources(recources: _getVoyageShipPrice(type: type))){
-      spendRecources(recources: _getVoyageShipPrice(type: type));
+    if(hasEnoughRecources(recources: type.price)){
+      spendRecources(recources: type.price);
       VoyagePort port = _getVoyagePort();
       port.voyageShips[type] = (port.voyageShips[type] ?? 0) + 1 ;
     }
@@ -150,12 +124,12 @@ extension PlayerVoyageOperator on Player {
     VoyagePort port = _getVoyagePort();
     if(index >= port.currentVoyages.length || index < 0) return;
     Voyage voyage = port.currentVoyages[index];
-    bool isSucces = Random().nextInt(voyage.successThreshold) <= _calculateFleetBasePoints();
+    bool isSucces = _random.nextInt(voyage.successThreshold) <= _calculateFleetBasePoints();
 
     for(VoyageShipType type in port.voyageShips.keys){
       int returningShips = 0;
       for (var i = 0; i < (port.voyageShips[type] ?? 0); i++) {
-        if( Random().nextDouble() <= (_getVoyageShipReturnRate(type: type) / (isSucces ? 1 : 2))) returningShips++;
+        if( _random.nextDouble() <= (type.returnRate / (isSucces ? 1 : 2))) returningShips++;
       }
       port.voyageShips[type] = returningShips;
     }

@@ -9,7 +9,7 @@ enum RecourceType {
     return RecourceType.values.any((e) => e.name == recourceType);
   }
 
-  RecourceType get({required String recourceType}){
+  static RecourceType get({required String recourceType}){
     return RecourceType.values.singleWhere((e) => e.name == recourceType);
   }  
 }
