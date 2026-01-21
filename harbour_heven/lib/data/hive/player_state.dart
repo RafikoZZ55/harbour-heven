@@ -11,8 +11,12 @@ class PlayerState {
   @HiveField(1)
   Map<String, int> recources;
 
+  @HiveField(2)
+  DateTime lastInteractionTimeStamp;
+
   PlayerState({
     required this.buildings,
     required this.recources,
+    required this.lastInteractionTimeStamp,
   });
 }

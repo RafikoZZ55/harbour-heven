@@ -99,7 +99,7 @@ extension PlayerVoyageOperator on Player {
     );
   }
 
-  void generateVoyages(){
+  void _generateVoyages(){
     List<Voyage> voyages = List.generate(_calculateVoyageQueeSize(), (_) => generateVoyage());
     _getVoyagePort().currentVoyages = voyages;
   }
@@ -108,7 +108,7 @@ extension PlayerVoyageOperator on Player {
     Map<RecourceType,int> cost = {RecourceType.gold: 5};
     if(hasEnoughRecources(recources: cost)){
       spendRecources(recources: cost);
-      generateVoyages();
+      _generateVoyages();
     }
   }
 

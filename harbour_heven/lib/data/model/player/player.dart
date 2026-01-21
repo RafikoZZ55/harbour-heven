@@ -1,4 +1,8 @@
 import 'package:harbour_heven/data/model/building/building.dart';
+import 'package:harbour_heven/data/model/building/fishing_dock.dart';
+import 'package:harbour_heven/data/model/building/quarry.dart';
+import 'package:harbour_heven/data/model/building/sawmill.dart';
+import 'package:harbour_heven/data/model/building/tawern.dart';
 import 'package:harbour_heven/data/model/enum/recource_type.dart';
 import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/model/enum/building_type.dart';
@@ -20,18 +24,46 @@ part 'operators/player_voyage_operator.dart';
 class Player {
   List<Building> buildings;
   Map<RecourceType, int> recources;
+  DateTime lastInteractionTimeStamp;
 
-  Player({required this.buildings, required this.recources});
+  Player({
+    required this.buildings, 
+    required this.recources,
+    required this.lastInteractionTimeStamp,
+  });
 
   Player copyWith({
     List<Building>? buildings,
     Map<RecourceType, int>? recources,
+    DateTime? lastInteractionTimeStamp,
   }) {
     return Player(
       buildings: buildings ?? this.buildings, 
       recources: recources ?? this.recources,
+      lastInteractionTimeStamp: lastInteractionTimeStamp ?? this.lastInteractionTimeStamp
     );
   }
+
+  static Player empty(){
+    Player player = Player(
+    buildings: [
+      FishingDock(level: 1),
+      Quarry(level: 1),
+      Sawmill(level: 1),
+      Tawern(level: 1),
+      TradingPort(reputation: 0.5, level: 1),
+      VoyagePort(level: 1),
+    ],
+    recources: {},
+    lastInteractionTimeStamp: DateTime.now(),
+    );
+
+    for(RecourceType recourceType in RecourceType.values) {player.recources[recourceType] = 0;}
+    for(VoyageShipType voyageShipType in VoyageShipType.values) {player.buildings.whereType<VoyagePort>().first.voyageShips[voyageShipType] = 0;}
+
+    return player;
+  }
+
 
   Random get _random => Random();
 

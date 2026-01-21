@@ -29,6 +29,7 @@ class PlayerMapper {
     return Player(
       buildings: playerState.buildings.map((buildingState) => _convertBuildingState(buildingState: buildingState)).whereType<Building>().toList(), 
       recources: _convertRecourcesState(recourcesState: playerState.recources),
+      lastInteractionTimeStamp: playerState.lastInteractionTimeStamp,
     );
   }
 
@@ -36,6 +37,7 @@ class PlayerMapper {
     return PlayerState(
       buildings: player.buildings.map((building) => _convertBuilding(building: building)).whereType<BuildingState>().toList(), 
       recources: _convertRecources(recources: player.recources),
+      lastInteractionTimeStamp: player.lastInteractionTimeStamp,
     );
   }
 }
