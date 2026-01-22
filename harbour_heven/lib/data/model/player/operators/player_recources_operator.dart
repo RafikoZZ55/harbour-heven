@@ -46,4 +46,15 @@ extension PlayerRecourcesOperator on Player {
       _spend(recourceType: key,amount: recources[key] ?? 0);
     }
   }
+
+
+  void performCycle({int? cycles}){
+    List<Generator> generators = buildings.whereType<Generator>().toList();
+    for(Generator generator in generators ) {
+      Map<RecourceType,int> generatedRecources = generator.calculateRecourcesPerCycle();
+      generatedRecources.updateAll((key, value) => value * (cycles ?? 1));
+      addRecources(recources: generatedRecources);
+    }
+
+  }
 }

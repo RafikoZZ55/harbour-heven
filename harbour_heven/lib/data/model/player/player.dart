@@ -1,5 +1,6 @@
 import 'package:harbour_heven/data/model/building/building.dart';
 import 'package:harbour_heven/data/model/building/fishing_dock.dart';
+import 'package:harbour_heven/data/model/building/generator.dart';
 import 'package:harbour_heven/data/model/building/quarry.dart';
 import 'package:harbour_heven/data/model/building/sawmill.dart';
 import 'package:harbour_heven/data/model/building/tawern.dart';
@@ -24,7 +25,7 @@ part 'operators/player_voyage_operator.dart';
 class Player {
   List<Building> buildings;
   Map<RecourceType, int> recources;
-  DateTime lastInteractionTimeStamp;
+  int lastInteractionTimeStamp;
 
   Player({
     required this.buildings, 
@@ -35,13 +36,19 @@ class Player {
   Player copyWith({
     List<Building>? buildings,
     Map<RecourceType, int>? recources,
-    DateTime? lastInteractionTimeStamp,
+    int? lastInteractionTimeStamp,
   }) {
     return Player(
       buildings: buildings ?? this.buildings, 
       recources: recources ?? this.recources,
       lastInteractionTimeStamp: lastInteractionTimeStamp ?? this.lastInteractionTimeStamp
     );
+  }
+
+  int calculateCycles({required int cycleInMillisecons}){
+    DateTime currentTime = DateTime.now();
+    int difference = currentTime.millisecondsSinceEpoch - lastInteractionTimeStamp;
+    return (difference / cycleInMillisecons).toInt();
   }
 
   static Player empty(){
@@ -55,7 +62,7 @@ class Player {
       VoyagePort(level: 1),
     ],
     recources: {},
-    lastInteractionTimeStamp: DateTime.now(),
+    lastInteractionTimeStamp: 0,
     );
 
     for(RecourceType recourceType in RecourceType.values) {player.recources[recourceType] = 0;}

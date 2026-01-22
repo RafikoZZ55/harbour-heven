@@ -65,18 +65,18 @@ extension PlayerOfferOperator on Player {
     );
   }
 
-  void _generateOffers() {
+  void generateOffers() {
     final port = _getTradingPort();
     List<Offer> offers = List.generate(_claculeteOfferQueeSize(), (_) => _generateOffer());
     port.currentOffers = offers;
   }
 
-  void _rerollOffers(){
+  void reRollOffers(){
     Map<RecourceType,int> cost = {RecourceType.gold: 5};
     if(hasEnoughRecources(recources: cost)){
     spendRecources(recources: cost);
     }
-    _generateOffers();
+    generateOffers();
   }
 
   void trade({required int index}) {

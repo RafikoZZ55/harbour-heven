@@ -87,7 +87,7 @@ extension PlayerVoyageOperator on Player {
       
   }
 
-  Voyage generateVoyage(){
+  Voyage _generateVoyage(){
     VoyageType voyageType = VoyageType.getRandom();
     DifficultyType difficulty = _calculateVoyageDifficulty();
 
@@ -99,8 +99,8 @@ extension PlayerVoyageOperator on Player {
     );
   }
 
-  void _generateVoyages(){
-    List<Voyage> voyages = List.generate(_calculateVoyageQueeSize(), (_) => generateVoyage());
+  void generateVoyages(){
+    List<Voyage> voyages = List.generate(_calculateVoyageQueeSize(), (_) => _generateVoyage());
     _getVoyagePort().currentVoyages = voyages;
   }
 
@@ -108,7 +108,7 @@ extension PlayerVoyageOperator on Player {
     Map<RecourceType,int> cost = {RecourceType.gold: 5};
     if(hasEnoughRecources(recources: cost)){
       spendRecources(recources: cost);
-      _generateVoyages();
+      generateVoyages();
     }
   }
 
