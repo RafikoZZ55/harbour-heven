@@ -19,7 +19,7 @@ class PlayerStateAdapter extends TypeAdapter<PlayerState> {
     return PlayerState(
       buildings: (fields[0] as List).cast<BuildingState>(),
       recources: (fields[1] as Map).cast<String, int>(), 
-      lastInteractionTimeStamp: (fields[2] as int),
+      lastTickAt: (fields[2] as int),
     );
   }
 

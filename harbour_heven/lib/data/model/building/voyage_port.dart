@@ -10,15 +10,17 @@ import 'package:harbour_heven/data/model/voyage/voyage.dart';
 class VoyagePort extends Building {
   List<Voyage> currentVoyages;
   Map<VoyageShipType, int> voyageShips;
+  int nextRefreshAt;
 
 
-  VoyagePort({int? level, Map<VoyageShipType, int>? voyageShips, List<Voyage>? currentVoyages}):
+  VoyagePort({int? level, Map<VoyageShipType, int>? voyageShips, List<Voyage>? currentVoyages, int? nextRefreshAt}):
   voyageShips = {
     VoyageShipType.barteringShip: voyageShips?[VoyageShipType.barteringShip] ?? 0,
     VoyageShipType.heavyShip: voyageShips?[VoyageShipType.heavyShip] ?? 0,
     VoyageShipType.lightShip: voyageShips?[VoyageShipType.lightShip] ?? 0
   },
   currentVoyages = currentVoyages ?? [],
+  nextRefreshAt = nextRefreshAt ?? 0,
   super(
     level: level ?? 1,
     type: BuildingType.voyagePort,

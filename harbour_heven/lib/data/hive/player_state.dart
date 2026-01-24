@@ -12,11 +12,11 @@ class PlayerState {
   Map<String, int> recources;
 
   @HiveField(2)
-  int lastInteractionTimeStamp;
+  int lastTickAt;
 
   PlayerState({
     required this.buildings,
     required this.recources,
-    required this.lastInteractionTimeStamp,
+    required this.lastTickAt,
   });
 }

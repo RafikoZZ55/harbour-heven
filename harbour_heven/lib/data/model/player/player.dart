@@ -25,30 +25,25 @@ part 'operators/player_voyage_operator.dart';
 class Player {
   List<Building> buildings;
   Map<RecourceType, int> recources;
-  int lastInteractionTimeStamp;
+  int lastTickAt;
 
   Player({
     required this.buildings, 
     required this.recources,
-    required this.lastInteractionTimeStamp,
+    required this.lastTickAt,
   });
 
   Player copyWith({
     List<Building>? buildings,
     Map<RecourceType, int>? recources,
     int? lastInteractionTimeStamp,
+    int? lastTickAt,
   }) {
     return Player(
       buildings: buildings ?? this.buildings, 
       recources: recources ?? this.recources,
-      lastInteractionTimeStamp: lastInteractionTimeStamp ?? this.lastInteractionTimeStamp
+      lastTickAt: lastTickAt ?? this.lastTickAt
     );
-  }
-
-  int calculateCycles({required int cycleInMillisecons}){
-    DateTime currentTime = DateTime.now();
-    int difference = currentTime.millisecondsSinceEpoch - lastInteractionTimeStamp;
-    return (difference / cycleInMillisecons).toInt();
   }
 
   static Player empty(){
@@ -62,7 +57,7 @@ class Player {
       VoyagePort(level: 1),
     ],
     recources: {},
-    lastInteractionTimeStamp: 0,
+    lastTickAt: 0,
     );
 
     for(RecourceType recourceType in RecourceType.values) {player.recources[recourceType] = 0;}

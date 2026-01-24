@@ -1,16 +1,25 @@
 
+import 'dart:async';
+
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:harbour_heven/data/hive/player_state.dart';
+import 'package:harbour_heven/data/model/building/trading_port.dart';
+import 'package:harbour_heven/data/model/building/voyage_port.dart';
+import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/player/player.dart';
 import 'package:harbour_heven/data/providers/player/mapper/player_mapper.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class PlayerController extends StateNotifier<Player> {
-  PlayerController(super.state);
+  PlayerController(super.state) {
+    _load();
+    _startTimer();
+  }
   Box<PlayerState> playerStateBox = Hive.box<PlayerState>('player');
 
   void _refresh() => state = state.copyWith();
+   late Timer _timer;
 
   void _save() async { 
     _refresh();
@@ -21,6 +30,11 @@ class PlayerController extends StateNotifier<Player> {
   }
 
   //--------------------------------offers----------------------------------
+
+  TradingPort _getTradingPort() {
+    return state.buildings.firstWhere((b) => b.type == BuildingType.tradingPort) as TradingPort;
+  }
+
   void trade({required int offerIndex}){
     state.trade(index: offerIndex);
     _save();
@@ -31,14 +45,20 @@ class PlayerController extends StateNotifier<Player> {
     _save();
   }
 
-  void reRollOffers(){
+  void _reRollOffers(){
     state.reRollOffers();
+    _getTradingPort().nextRefreshAt = DateTime.now().add(Duration(hours: 1)).millisecondsSinceEpoch;
     _save();
   }
 
   //-------------------------------------------------------------------------
 
   //------------------------------voyages------------------------------------
+
+  VoyagePort _getVoyagePort() {
+    return state.buildings.firstWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
+  }
+
   void buyVoyageShip({required VoyageShipType type}) {
     state.buyVoyageShip(type: type);
     _save();
@@ -49,33 +69,46 @@ class PlayerController extends StateNotifier<Player> {
     _save();
   }
 
-  void generateVoyages(){
+  void _reRollVoyages(){
     state.reRollVoyages();
-    _save();
-  }
-
-  void reRollVoyages(){
-    state.reRollVoyages();
+    _getVoyagePort().nextRefreshAt = DateTime.now().add(Duration(hours: 1)).millisecondsSinceEpoch;
     _save();
   }
   //-------------------------------------------------------------------------
 
 
-  void atutomaticReRoll(){
-    state.reRollOffers();
-    state.reRollVoyages();
-    _save();
-  }
-
-  void performCycle({required int? cycles}){
+  void _performCycle({required int? cycles}){
     state.performCycle(cycles: cycles);
     _save();
   }
 
-  void load(){
-    int cycles = state.calculateCycles(cycleInMillisecons: 1000);
-    state.performCycle(cycles: cycles);
+  void _load(){
+    state.performCycle(cycles: _calculateCycles());
     _save();
+  }
+
+  int _calculateCycles(){
+    return ((state.lastTickAt - DateTime.now().millisecondsSinceEpoch) / (1000 * 60)).toInt();
+  }
+
+  void _onTick(){
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
+    _performCycle(cycles: 1);
+
+    if(_getTradingPort().nextRefreshAt <= currentTime){ _reRollOffers();}
+    if(_getVoyagePort().nextRefreshAt <= currentTime) {_reRollVoyages();}
+    state = state.copyWith(lastTickAt: DateTime.now().millisecondsSinceEpoch);
+    _save();
+  }
+
+  void _startTimer(){
+    _timer = Timer.periodic(const Duration(minutes: 1), (_) => _onTick());
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
 

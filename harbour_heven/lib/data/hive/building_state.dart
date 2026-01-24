@@ -26,6 +26,9 @@ class BuildingState {
   @HiveField(5)
   List<OfferState>? currentOffers;
 
+  @HiveField(6)
+  int? nextRefreshAt;
+
   BuildingState({
     required this.level,
     required this.type,
@@ -33,5 +36,6 @@ class BuildingState {
     this.voyageShips,
     this.currentOffers,
     this.reputation,
+    this.nextRefreshAt,
     });
 }

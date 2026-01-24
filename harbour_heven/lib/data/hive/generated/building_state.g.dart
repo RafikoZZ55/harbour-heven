@@ -23,6 +23,7 @@ class BuildingStateAdapter extends TypeAdapter<BuildingState> {
       voyageShips: (fields[3] as Map?)?.cast<String, int>(),
       currentOffers: (fields[5] as List?)?.cast<OfferState>(),
       reputation: fields[4] as double?,
+      nextRefreshAt: fields[5] as int,
     );
   }
 

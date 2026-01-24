@@ -9,11 +9,14 @@ import 'package:harbour_heven/data/model/enum/recource_type.dart';
 class TradingPort extends Building {
   double reputation;
   List<Offer> currentOffers;
+  int nextRefreshAt;
 
 
-  TradingPort({int? level, required double reputation, List<Offer>? currentOffers}):
+
+  TradingPort({int? level, required double reputation, List<Offer>? currentOffers, int? nextRefreshAt}):
   reputation = reputation.clamp(0, 1),
   currentOffers = currentOffers ?? [],
+  nextRefreshAt = nextRefreshAt ?? 0,
   super(
     level: level ?? 1,
     type: BuildingType.tradingPort,
