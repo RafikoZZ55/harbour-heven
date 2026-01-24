@@ -12,16 +12,13 @@ import 'package:harbour_heven/data/providers/player/mapper/player_mapper.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class PlayerController extends StateNotifier<Player> {
-  PlayerController(super.state) {
-    _load();
-    _startTimer();
-  }
-  Box<PlayerState> playerStateBox = Hive.box<PlayerState>('player');
+  PlayerController(super.state) { _init();}
 
   void _refresh() => state = state.copyWith();
    late Timer _timer;
 
   void _save() async { 
+    Box<PlayerState> playerStateBox = Hive.box<PlayerState>('player');
     _refresh();
     PlayerMapper playerMapper = PlayerMapper();
     PlayerState playerState = playerMapper.toState(player: state);
@@ -87,6 +84,18 @@ class PlayerController extends StateNotifier<Player> {
     _save();
   }
 
+  Future<Player> _loadFromHive() async{
+    Box<PlayerState> playerStateBox = await Hive.openBox<PlayerState>('player');
+   PlayerState? playerState = playerStateBox.get('player');
+   PlayerMapper playerMapper = PlayerMapper();
+   Player player;
+
+  if(playerState == null) {player = Player.empty();}   
+  else {player = playerMapper.fromState(playerState: playerState);}
+
+  return player;
+  }
+
   int _calculateCycles(){
     return ((state.lastTickAt - DateTime.now().millisecondsSinceEpoch) / (1000 * 60)).toInt();
   }
@@ -103,6 +112,13 @@ class PlayerController extends StateNotifier<Player> {
 
   void _startTimer(){
     _timer = Timer.periodic(const Duration(minutes: 1), (_) => _onTick());
+  }
+
+  void _init() async{
+    Player player = await _loadFromHive();
+    state = player;
+    _load();
+    _startTimer();
   }
 
   @override
