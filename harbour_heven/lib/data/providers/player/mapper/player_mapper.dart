@@ -14,7 +14,7 @@ import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/enum/difficulty_type.dart';
 import 'package:harbour_heven/data/model/enum/offer_type.dart';
-import 'package:harbour_heven/data/model/enum/recource_type.dart';
+import 'package:harbour_heven/data/model/enum/resource_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_type.dart';
 import 'package:harbour_heven/data/model/voyage/voyage.dart';
@@ -28,7 +28,7 @@ class PlayerMapper {
   Player fromState({required PlayerState playerState}){
     return Player(
       buildings: playerState.buildings.map((buildingState) => _convertBuildingState(buildingState: buildingState)).whereType<Building>().toList(), 
-      recources: _convertRecourcesState(recourcesState: playerState.recources),
+      resources: _convertRecourcesState(recourcesState: playerState.resources),
       lastTickAt: playerState.lastTickAt,
     );
   }
@@ -36,7 +36,7 @@ class PlayerMapper {
   PlayerState toState({required Player player}){
     return PlayerState(
       buildings: player.buildings.map((building) => _convertBuilding(building: building)).whereType<BuildingState>().toList(), 
-      recources: _convertRecources(recources: player.recources),
+      resources: _convertRecources(recources: player.resources),
       lastTickAt: player.lastTickAt,
     );
   }

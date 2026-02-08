@@ -25,15 +25,10 @@ enum BuildingType {
   }
 
   static List<BuildingType> special(){
-    return [
-      BuildingType.tawern
-    ];
-  }
-
-  static List<BuildingType> buildings(){
-    return [
+     return [
       BuildingType.tradingPort,
       BuildingType.voyagePort,
+      BuildingType.tawern,
     ];
   }
 }

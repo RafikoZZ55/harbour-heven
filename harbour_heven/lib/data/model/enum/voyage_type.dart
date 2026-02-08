@@ -1,19 +1,19 @@
 import 'dart:math';
 
-import 'package:harbour_heven/data/model/enum/recource_type.dart';
+import 'package:harbour_heven/data/model/enum/resource_type.dart';
 
 enum VoyageType {
-  woodTrip({RecourceType.wood}),
-  fishingTrip({RecourceType.fish}),
-  stoneTrip({RecourceType.stone}),
-  goldTrip({RecourceType.gold}),
-  buildSupplyTrip({RecourceType.stone, RecourceType.wood}),
-  foodSupplyTrip({RecourceType.fish,RecourceType.wood}),
-  richFishingTrip({RecourceType.gold, RecourceType.fish}),
-  tradeConvoy({RecourceType.gold,RecourceType.stone}),
-  bigTradeTrip({RecourceType.fish,RecourceType.gold,RecourceType.stone,RecourceType.wood});
+  woodTrip({ResourceType.wood}),
+  fishingTrip({ResourceType.fish}),
+  stoneTrip({ResourceType.stone}),
+  goldTrip({ResourceType.gold}),
+  buildSupplyTrip({ResourceType.stone, ResourceType.wood}),
+  foodSupplyTrip({ResourceType.fish,ResourceType.wood}),
+  richFishingTrip({ResourceType.gold, ResourceType.fish}),
+  tradeConvoy({ResourceType.gold,ResourceType.stone}),
+  bigTradeTrip({ResourceType.fish,ResourceType.gold,ResourceType.stone,ResourceType.wood});
 
-  final Set<RecourceType> recources;
+  final Set<ResourceType> recources;
   const VoyageType(this.recources);
 
   static VoyageType getRandom() {
@@ -21,7 +21,7 @@ enum VoyageType {
     return values[Random().nextInt(values.length)];
   }
 
-  bool gives(RecourceType recource) => recources.contains(recource);
+  bool gives(ResourceType recource) => recources.contains(recource);
 
   static bool checkIfExists({required String voyageType}){
     return VoyageType.values.any((e) => e.name == voyageType);

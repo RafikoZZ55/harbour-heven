@@ -18,7 +18,7 @@ class PlayerStateAdapter extends TypeAdapter<PlayerState> {
     };
     return PlayerState(
       buildings: (fields[0] as List).cast<BuildingState>(),
-      recources: (fields[1] as Map).cast<String, int>(),
+      resources: (fields[1] as Map).cast<String, int>(),
       lastTickAt: fields[2] as int,
     );
   }
@@ -30,7 +30,7 @@ class PlayerStateAdapter extends TypeAdapter<PlayerState> {
       ..writeByte(0)
       ..write(obj.buildings)
       ..writeByte(1)
-      ..write(obj.recources)
+      ..write(obj.resources)
       ..writeByte(2)
       ..write(obj.lastTickAt);
   }

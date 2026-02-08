@@ -1,87 +1,87 @@
 import 'dart:math';
-import 'recource_type.dart';
+import 'resource_type.dart';
 
 enum OfferType {
   buildingPackage(
-    rewardType: {RecourceType.stone, RecourceType.wood},
-    priceType: {RecourceType.gold},
+    rewardType: {ResourceType.stone, ResourceType.wood},
+    priceType: {ResourceType.gold},
   ),
 
   buildersRush(
-    rewardType: {RecourceType.stone},
-    priceType: {RecourceType.wood, RecourceType.gold},
+    rewardType: {ResourceType.stone},
+    priceType: {ResourceType.wood, ResourceType.gold},
   ),
 
   lumberDeal(
-    rewardType: {RecourceType.wood},
-    priceType: {RecourceType.fish, RecourceType.gold},
+    rewardType: {ResourceType.wood},
+    priceType: {ResourceType.fish, ResourceType.gold},
   ),
 
   quarryContract(
-    rewardType: {RecourceType.stone},
-    priceType: {RecourceType.fish, RecourceType.gold},
+    rewardType: {ResourceType.stone},
+    priceType: {ResourceType.fish, ResourceType.gold},
   ),
 
   fishingSupply(
-    rewardType: {RecourceType.fish},
-    priceType: {RecourceType.wood, RecourceType.stone},
+    rewardType: {ResourceType.fish},
+    priceType: {ResourceType.wood, ResourceType.stone},
   ),
 
   noMoreFishing(
-    rewardType: {RecourceType.fish},
-    priceType: {RecourceType.gold},
+    rewardType: {ResourceType.fish},
+    priceType: {ResourceType.gold},
   ),
 
   goodOldBarter(
-    rewardType: {RecourceType.gold},
+    rewardType: {ResourceType.gold},
     priceType: {
-      RecourceType.fish,
-      RecourceType.stone,
-      RecourceType.wood,
+      ResourceType.fish,
+      ResourceType.stone,
+      ResourceType.wood,
     },
   ),
 
   merchantFavor(
-    rewardType: {RecourceType.gold},
-    priceType: {RecourceType.stone, RecourceType.wood},
+    rewardType: {ResourceType.gold},
+    priceType: {ResourceType.stone, ResourceType.wood},
   ),
 
   tradeBundle(
     rewardType: {
-      RecourceType.gold,
-      RecourceType.wood,
+      ResourceType.gold,
+      ResourceType.wood,
     },
-    priceType: {RecourceType.fish},
+    priceType: {ResourceType.fish},
   ),
 
   supplyExchange(
     rewardType: {
-      RecourceType.fish,
-      RecourceType.wood,
+      ResourceType.fish,
+      ResourceType.wood,
     },
-    priceType: {RecourceType.stone},
+    priceType: {ResourceType.stone},
   ),
 
   allForOne(
     rewardType: {
-      RecourceType.fish,
-      RecourceType.stone,
-      RecourceType.wood,
+      ResourceType.fish,
+      ResourceType.stone,
+      ResourceType.wood,
     },
-    priceType: {RecourceType.gold},
+    priceType: {ResourceType.gold},
   ),
 
   luxuryShipment(
     rewardType: {
-      RecourceType.fish,
-      RecourceType.stone,
-      RecourceType.wood,
+      ResourceType.fish,
+      ResourceType.stone,
+      ResourceType.wood,
     },
-    priceType: {RecourceType.gold},
+    priceType: {ResourceType.gold},
   );
 
-  final Set<RecourceType> rewardType;
-  final Set<RecourceType> priceType;
+  final Set<ResourceType> rewardType;
+  final Set<ResourceType> priceType;
 
   const OfferType({
     required this.rewardType,

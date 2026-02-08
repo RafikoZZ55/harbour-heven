@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/building/generator.dart';
-import 'package:harbour_heven/data/model/enum/recource_type.dart';
+import 'package:harbour_heven/data/model/enum/resource_type.dart';
 
 class Sawmill extends Generator {
   Sawmill({int? level}):
@@ -12,22 +12,22 @@ class Sawmill extends Generator {
     level: level ?? 1,
     type: BuildingType.sawmill,
     description: "Place where you cut wood",
-    recourcetype: RecourceType.wood,
-    price: <RecourceType,int>{}
+    recourcetype: ResourceType.wood,
+    price: <ResourceType,int>{}
   );
 
 
 
   @override
-  Map<RecourceType, int> calculateRecourcesPerCycle() {
-    return {RecourceType.wood: 2 * level};
+  Map<ResourceType, int> calculateRecourcesPerCycle() {
+    return {ResourceType.wood: 2 * level};
   }
 
   @override
-  Map<RecourceType, int> upgradeCost() {
-    Map<RecourceType,int> cost = {
-      RecourceType.stone: 200 + 5 * pow(2, level).toInt(),
-      RecourceType.fish: (150 + 2.5 * pow(2, level)).toInt(),
+  Map<ResourceType, int> upgradeCost() {
+    Map<ResourceType,int> cost = {
+      ResourceType.stone: 200 + 5 * pow(2, level).toInt(),
+      ResourceType.fish: (150 + 2.5 * pow(2, level)).toInt(),
     };
     return cost;
   }

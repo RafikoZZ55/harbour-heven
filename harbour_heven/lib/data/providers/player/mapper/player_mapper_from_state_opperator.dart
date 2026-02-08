@@ -40,18 +40,18 @@ extension PlayerMapperFromStateOpperator on PlayerMapper  {
     return Voyage(
       type: voyageType, 
       difficulty: difficultyType, 
-      recources: _convertRecourcesState(recourcesState: voyageState.recources), 
+      recources: _convertRecourcesState(recourcesState: voyageState.resources), 
       successThreshold: voyageState.successThreshold,
     );
   }
 
 
-  Map<RecourceType,int> _convertRecourcesState({required Map<String,int> recourcesState}){
-    Map<RecourceType,int> recources = {};
+  Map<ResourceType,int> _convertRecourcesState({required Map<String,int> recourcesState}){
+    Map<ResourceType,int> recources = {};
 
     for(String recourceState in recourcesState.keys){
-      if(!RecourceType.checkIfExists(recourceType: recourceState)) continue;
-      RecourceType recourceType = RecourceType.get(recourceType: recourceState);
+      if(!ResourceType.checkIfExists(recourceType: recourceState)) continue;
+      ResourceType recourceType = ResourceType.get(recourceType: recourceState);
       recources[recourceType] = recourcesState[recourceState] ?? 0;
     }
   
@@ -71,12 +71,14 @@ extension PlayerMapperFromStateOpperator on PlayerMapper  {
       case BuildingType.tradingPort: building = TradingPort(
         level: buildingState.level, 
         reputation: buildingState.reputation ?? 0.5, 
+        nextRefreshAt: buildingState.nextRefreshAt,
         currentOffers: buildingState.currentOffers!.map((offerState) => _convertOfferState(offerState: offerState)).whereType<Offer>().toList(),
       );
       break;
       case BuildingType.voyagePort: building = VoyagePort(
         level: buildingState.level,
         voyageShips: _convertVoyageShipsState(voyageShipsState: buildingState.voyageShips ?? {}),
+        nextRefreshAt: buildingState.nextRefreshAt,
         currentVoyages: buildingState.currentVoyages!.map((voyageState) => _convertVoyagState(voyageState: voyageState)).whereType<Voyage>().toList(),
       );
       break;

@@ -1,11 +1,11 @@
 
 import 'package:harbour_heven/data/model/enum/building_type.dart';
-import 'package:harbour_heven/data/model/enum/recource_type.dart';
+import 'package:harbour_heven/data/model/enum/resource_type.dart';
 
 abstract class Building {
 int level;
 final BuildingType type;
-final Map<RecourceType, int> price;
+final Map<ResourceType, int> price;
 final String description;
 
 Building({
@@ -15,6 +15,6 @@ Building({
   required this.price,
 }): assert((level) >=1,"level must be bigger or equal to one");
 
-Map<RecourceType, int> upgradeCost();
+Map<ResourceType, int> upgradeCost();
 
 }

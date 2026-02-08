@@ -53,24 +53,24 @@ extension PlayerVoyageOperator on Player {
     else {return DifficultyType.extreme;}
   }
 
-  Map<RecourceType, int> _calculateVoyageRecources({required VoyageType voyageType, required DifficultyType difficulty}) {
+  Map<ResourceType, int> _calculateVoyageRecources({required VoyageType voyageType, required DifficultyType difficulty}) {
     int voyagePortLevel = _getVoyagePort().level;
     int baseRecources = 100 + 200 * voyagePortLevel + 250 * (difficulty.index + 1) + _random.nextInt((12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
     int fixedBonus = 100 * (difficulty.index + 1) + 75 * voyagePortLevel;
-    Map<RecourceType,int> recources = {
-      RecourceType.wood: 0,
-      RecourceType.fish: 0,
-      RecourceType.stone: 0,
-      RecourceType.gold: 0,
+    Map<ResourceType,int> recources = {
+      ResourceType.wood: 0,
+      ResourceType.fish: 0,
+      ResourceType.stone: 0,
+      ResourceType.gold: 0,
     };
 
-    for(RecourceType recource in voyageType.recources){
+    for(ResourceType recource in voyageType.recources){
       recources[recource] = fixedBonus;
     }
 
-    final List<RecourceType> activeRecuorces = voyageType.recources.toList();
+    final List<ResourceType> activeRecuorces = voyageType.recources.toList();
     while(baseRecources - recources.values.reduce((value, element) => value + element) > 0){
-      RecourceType selectedRecource = activeRecuorces[_random.nextInt(activeRecuorces.length)];
+      ResourceType selectedRecource = activeRecuorces[_random.nextInt(activeRecuorces.length)];
 
       recources[selectedRecource] = min(
         baseRecources - recources.values.reduce((value, element) => value + element), 
@@ -105,7 +105,7 @@ extension PlayerVoyageOperator on Player {
   }
 
   void reRollVoyages(){
-    Map<RecourceType,int> cost = {RecourceType.gold: 5};
+    Map<ResourceType,int> cost = {ResourceType.gold: 5};
     if(hasEnoughRecources(recources: cost)){
       spendRecources(recources: cost);
       generateVoyages();

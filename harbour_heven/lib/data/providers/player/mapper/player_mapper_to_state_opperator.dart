@@ -8,9 +8,9 @@ extension PlayerMapperToStateOpperator on PlayerMapper{
     return voyageShipsState;
   }
 
-  Map<String, int> _convertRecources({required Map<RecourceType, int> recources}) {
+  Map<String, int> _convertRecources({required Map<ResourceType, int> recources}) {
     Map<String,int> recourcesState = {};
-    for(RecourceType recourceType in recources.keys) {recourcesState[recourceType.name] =  (recources[recourceType] ?? 0);}
+    for(ResourceType recourceType in recources.keys) {recourcesState[recourceType.name] =  (recources[recourceType] ?? 0);}
     return recourcesState;
   }
 
@@ -18,7 +18,7 @@ extension PlayerMapperToStateOpperator on PlayerMapper{
     return VoyageState(
       type: voyage.type.name, 
       difficulty: voyage.difficulty.name, 
-      recources: _convertRecources(recources: voyage.recources), 
+      resources: _convertRecources(recources: voyage.recources), 
       successThreshold: voyage.successThreshold
     );
   }
@@ -46,6 +46,7 @@ extension PlayerMapperToStateOpperator on PlayerMapper{
         level: voyagePort.level, 
         type: voyagePort.type.name,
         currentVoyages: voyagePort.currentVoyages.map((voyage) => _convertVoyage(voyage: voyage)).toList(),
+        nextRefreshAt: voyagePort.nextRefreshAt,
         voyageShips: _convertVoyageShips(voyageShips: voyagePort.voyageShips),
       );
       break;
@@ -56,6 +57,7 @@ extension PlayerMapperToStateOpperator on PlayerMapper{
         level: tradingPort.level, 
         type: tradingPort.type.name,
         reputation: tradingPort.reputation,
+        nextRefreshAt: tradingPort.nextRefreshAt,
         currentOffers: tradingPort.currentOffers.map((offer) => _convertOffer(offer: offer)).toList(),
       );
       break;

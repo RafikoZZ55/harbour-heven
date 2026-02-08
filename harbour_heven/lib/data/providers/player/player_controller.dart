@@ -1,133 +1,167 @@
-
 import 'dart:async';
-
+import 'dart:math';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:harbour_heven/data/hive/player_state.dart';
 import 'package:harbour_heven/data/model/building/trading_port.dart';
 import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/model/enum/building_type.dart';
+import 'package:harbour_heven/data/model/enum/resource_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/player/player.dart';
 import 'package:harbour_heven/data/providers/player/mapper/player_mapper.dart';
 import 'package:hive_flutter/adapters.dart';
 
 class PlayerController extends StateNotifier<Player> {
-  PlayerController(super.state) { _init();}
+  PlayerController() : super(Player.empty());
 
-  void _refresh() => state = state.copyWith();
-   late Timer _timer;
+  Timer? _tickTimer;
+  Timer? _autoSaveTimer;
 
-  void _save() async { 
-    Box<PlayerState> playerStateBox = Hive.box<PlayerState>('player');
-    _refresh();
-    PlayerMapper playerMapper = PlayerMapper();
-    PlayerState playerState = playerMapper.toState(player: state);
+  bool _initialized = false;
+  static const int tickTimeInMilliseconds = 1 * 1000 * 5;
 
-    playerStateBox.put('player', playerState);
+  // ================= INIT =================
+  Future<void> init() async {
+    if (_initialized) return;
+    _initialized = true;
+
+    final loadedPlayer = await _loadFromHive();
+    state = loadedPlayer;
+
+    _applyOfflineProgress();
+    _startTickTimer();
+    _startAutoSave();
   }
 
-  //--------------------------------offers----------------------------------
-
-  TradingPort _getTradingPort() {
-    return state.buildings.firstWhere((b) => b.type == BuildingType.tradingPort) as TradingPort;
+  // ================= TIMERS =================
+  void _startTickTimer() {
+    _tickTimer = Timer.periodic(
+      const Duration(milliseconds: tickTimeInMilliseconds),
+      (_) => _onTick(),
+    );
   }
 
-  void trade({required int offerIndex}){
-    state.trade(index: offerIndex);
+  void _startAutoSave() {
+    _autoSaveTimer = Timer.periodic(
+      const Duration(minutes: 1, seconds: 10),
+      (_) => _save(),
+    );
+  }
+
+  // ================= TICK =================
+  void _onTick() {
+    Player player = state.copyWith(resources: Map.from(state.resources));
+  
+    final now = DateTime.now().millisecondsSinceEpoch;
+    player.performCycle(cycles: 1);
+
+    //TODO: fix refreshing error !!!!
+    /*
+    if (_getTradingPort(player: player).nextRefreshAt <= now) {
+      player.generateOffers();
+      _getTradingPort(player: player).nextRefreshAt =
+          DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch;
+    }
+
+    if (_getVoyagePort(player: player).nextRefreshAt <= now) {
+      player.generateVoyages();
+      _getVoyagePort(player: player).nextRefreshAt =
+          DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch;
+    }
+    */
+    player.lastTickAt = now;
+    state = player;
+  }
+
+  // ================= OFFLINE =================
+  void _applyOfflineProgress() {
+    final cycles = _calculateOfflineCycles();
+    if (cycles > 0) {
+      state.performCycle(cycles: cycles);
+    }
+  }
+
+  int _calculateOfflineCycles() {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final diff = now - state.lastTickAt;
+    if (diff <= 0) return 0;
+
+    const maxCycles = 1440;
+    return min(diff ~/ 60000, maxCycles);
+  }
+
+  // ================= SAVE / LOAD =================
+  Future<void> _save() async {
+    final box = Hive.box<PlayerState>('player');
+    final mapper = PlayerMapper();
+    box.put('player', mapper.toState(player: state));
+    state = state.copyWith();
+  }
+
+  Future<Player> _loadFromHive() async {
+    final box = await Hive.openBox<PlayerState>('player');
+    final saved = box.get('player');
+    if (saved == null) return Player.empty();
+
+    return PlayerMapper().fromState(playerState: saved);
+  }
+
+  // ================= HELPERS =================
+  TradingPort _getTradingPort({required Player player}) =>
+      player.buildings.firstWhere((b) => b.type == BuildingType.tradingPort)
+          as TradingPort;
+
+  VoyagePort _getVoyagePort({required Player player}) =>
+      player.buildings.firstWhere((b) => b.type == BuildingType.voyagePort)
+          as VoyagePort;
+
+  // ================= ACTIONS =================
+  void trade(int index) {
+    state.trade(index: index);
     _save();
   }
 
-  void haggle({required int offerIndex, required int amount}){
-    state.haggle(index: offerIndex, amount: amount);
+  void haggle(int index, int amount) {
+    state.haggle(index: index, amount: amount);
     _save();
   }
 
-  void _reRollOffers(){
-    state.reRollOffers();
-    _getTradingPort().nextRefreshAt = DateTime.now().add(Duration(hours: 1)).millisecondsSinceEpoch;
-    _save();
-  }
-
-  //-------------------------------------------------------------------------
-
-  //------------------------------voyages------------------------------------
-
-  VoyagePort _getVoyagePort() {
-    return state.buildings.firstWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
-  }
-
-  void buyVoyageShip({required VoyageShipType type}) {
+  void buyVoyageShip(VoyageShipType type) {
     state.buyVoyageShip(type: type);
     _save();
   }
 
-  void performVoyage({required int index}){
+  void performVoyage(int index) {
     state.performVoyage(index: index);
     _save();
   }
 
-  void _reRollVoyages(){
-    state.reRollVoyages();
-    _getVoyagePort().nextRefreshAt = DateTime.now().add(Duration(hours: 1)).millisecondsSinceEpoch;
-    _save();
-  }
-  //-------------------------------------------------------------------------
-
-
-  void _performCycle({required int? cycles}){
-    state.performCycle(cycles: cycles);
+  void upgradeBuilding(int index) {
+    state.upgradeBuilding(buildingIndex: index);
     _save();
   }
 
-  void _load(){
-    state.performCycle(cycles: _calculateCycles());
+  // ================= DEBUG =================
+  void reset() {
+    state = Player.empty();
     _save();
   }
 
-  Future<Player> _loadFromHive() async{
-    Box<PlayerState> playerStateBox = await Hive.openBox<PlayerState>('player');
-   PlayerState? playerState = playerStateBox.get('player');
-   PlayerMapper playerMapper = PlayerMapper();
-   Player player;
-
-  if(playerState == null) {player = Player.empty();}   
-  else {player = playerMapper.fromState(playerState: playerState);}
-
-  return player;
-  }
-
-  int _calculateCycles(){
-    return ((state.lastTickAt - DateTime.now().millisecondsSinceEpoch) / (1000 * 60)).toInt();
-  }
-
-  void _onTick(){
-    int currentTime = DateTime.now().millisecondsSinceEpoch;
-    _performCycle(cycles: 1);
-
-    if(_getTradingPort().nextRefreshAt <= currentTime){ _reRollOffers();}
-    if(_getVoyagePort().nextRefreshAt <= currentTime) {_reRollVoyages();}
-    state = state.copyWith(lastTickAt: DateTime.now().millisecondsSinceEpoch);
+  void addTestResources() {
+    state.addRecources(
+      recources: {
+        ResourceType.wood: 10,
+        ResourceType.stone: 10,
+      },
+    );
     _save();
   }
 
-  void _startTimer(){
-    _timer = Timer.periodic(const Duration(minutes: 1), (_) => _onTick());
-  }
-
-  void _init() async{
-    Player player = await _loadFromHive();
-    state = player;
-    _load();
-    _startTimer();
-  }
-
+  // ================= DISPOSE =================
   @override
   void dispose() {
-    _timer.cancel();
+    _tickTimer?.cancel();
+    _autoSaveTimer?.cancel();
     super.dispose();
   }
-
-
-
-
 }

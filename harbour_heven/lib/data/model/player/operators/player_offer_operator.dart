@@ -19,17 +19,18 @@ extension PlayerOfferOperator on Player {
     return 2 + (1* (_getTradingPort().level / 3).floor());
   }
 
-  Map<RecourceType,int> _calculateOfferRewards({required OfferType offerType}) {
+  Map<ResourceType,int> _calculateOfferRewards({required OfferType offerType}) {
     final int size = (_calculateRewardSize() * _calculateOfferMultiplier()).toInt();
     final tawernLevel = buildingLevel(buildingType: BuildingType.tawern);
     int recourceAmount;
-    Map<RecourceType,int> rewards = {};
+    Map<ResourceType,int> rewards = {};
+    for(ResourceType recourceType in offerType.rewardType){ rewards[recourceType] = 0; }
     int remainig = max(0,size - rewards.values.reduce((int a, int b) => a + b));
 
     while(remainig > 0){
-      for (final RecourceType type in offerType.rewardType) {
+      for (final ResourceType type in offerType.rewardType) {
         switch(type){
-          case RecourceType.gold: recourceAmount = 50 + 5 * _random.nextInt(tawernLevel);
+          case ResourceType.gold: recourceAmount = 50 + 5 * _random.nextInt(tawernLevel);
           default: recourceAmount = 100 + 10 * _random.nextInt(tawernLevel);
         }
 
@@ -40,11 +41,11 @@ extension PlayerOfferOperator on Player {
     return rewards;
   }
 
-  Map<RecourceType,int> _claculateOfferPrice({required OfferType offerType}) {
+  Map<ResourceType,int> _claculateOfferPrice({required OfferType offerType}) {
     final int price;
-    final RecourceType  recourceType = RecourceType.values[_random.nextInt(RecourceType.values.length)];
+    final ResourceType  recourceType = ResourceType.values[_random.nextInt(ResourceType.values.length)];
     switch(recourceType){
-      case RecourceType.gold: price = (_calculateRewardSize() * 0.85 / 4).toInt();
+      case ResourceType.gold: price = (_calculateRewardSize() * 0.85 / 4).toInt();
       default: price = (_calculateRewardSize() * 0.85 / 4).toInt();
     }
     return {recourceType: price};
@@ -72,7 +73,7 @@ extension PlayerOfferOperator on Player {
   }
 
   void reRollOffers(){
-    Map<RecourceType,int> cost = {RecourceType.gold: 5};
+    Map<ResourceType,int> cost = {ResourceType.gold: 5};
     if(hasEnoughRecources(recources: cost)){
     spendRecources(recources: cost);
     }

@@ -12,7 +12,7 @@ class VoyageState {
   final String difficulty;
 
   @HiveField(2)
-  final Map<String,int> recources;
+  final Map<String,int> resources;
 
   @HiveField(3)
   final int successThreshold;
@@ -20,7 +20,7 @@ class VoyageState {
   VoyageState({
     required this.type,
     required this.difficulty,
-    required this.recources,
+    required this.resources,
     required this.successThreshold,
   });
 

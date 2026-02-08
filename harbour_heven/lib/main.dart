@@ -20,14 +20,19 @@ void main() async {
   runApp(ProviderScope(child: const Main()));
 }
 
-class Main extends StatefulWidget {
+class Main extends ConsumerStatefulWidget {
   const Main({super.key});
+
 
   @override
   createState() => _MainState();
 }
 
-class _MainState extends State<Main> {
+class _MainState extends ConsumerState<Main> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:harbour_heven/data/model/building/generator.dart';
 import 'package:harbour_heven/data/model/building/quarry.dart';
 import 'package:harbour_heven/data/model/building/sawmill.dart';
 import 'package:harbour_heven/data/model/building/tawern.dart';
-import 'package:harbour_heven/data/model/enum/recource_type.dart';
+import 'package:harbour_heven/data/model/enum/resource_type.dart';
 import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/enum/difficulty_type.dart';
@@ -24,24 +24,24 @@ part 'operators/player_voyage_operator.dart';
 
 class Player {
   List<Building> buildings;
-  Map<RecourceType, int> recources;
+  Map<ResourceType, int> resources;
   int lastTickAt;
 
   Player({
     required this.buildings, 
-    required this.recources,
+    required this.resources,
     required this.lastTickAt,
   });
 
   Player copyWith({
     List<Building>? buildings,
-    Map<RecourceType, int>? recources,
+    Map<ResourceType, int>? resources,
     int? lastInteractionTimeStamp,
     int? lastTickAt,
   }) {
     return Player(
-      buildings: buildings ?? this.buildings, 
-      recources: recources ?? this.recources,
+      buildings: buildings == null ? List<Building>.from(this.buildings) : List<Building>.from(buildings), 
+      resources: resources == null ? Map<ResourceType,int>.from(this.resources) : Map<ResourceType,int>.from(resources),
       lastTickAt: lastTickAt ?? this.lastTickAt
     );
   }
@@ -56,11 +56,11 @@ class Player {
       TradingPort(reputation: 0.5, level: 1),
       VoyagePort(level: 1),
     ],
-    recources: {},
-    lastTickAt: 0,
+    resources: {},
+    lastTickAt: DateTime.now().millisecondsSinceEpoch,
     );
 
-    for(RecourceType recourceType in RecourceType.values) {player.recources[recourceType] = 0;}
+    for(ResourceType resourceType in ResourceType.values) {player.resources[resourceType] = 0;}
     for(VoyageShipType voyageShipType in VoyageShipType.values) {player.buildings.whereType<VoyagePort>().first.voyageShips[voyageShipType] = 0;}
 
     return player;

@@ -19,7 +19,7 @@ class VoyageStateAdapter extends TypeAdapter<VoyageState> {
     return VoyageState(
       type: fields[0] as String,
       difficulty: fields[1] as String,
-      recources: (fields[2] as Map).cast<String, int>(),
+      resources: (fields[2] as Map).cast<String, int>(),
       successThreshold: fields[3] as int,
     );
   }
@@ -33,7 +33,7 @@ class VoyageStateAdapter extends TypeAdapter<VoyageState> {
       ..writeByte(1)
       ..write(obj.difficulty)
       ..writeByte(2)
-      ..write(obj.recources)
+      ..write(obj.resources)
       ..writeByte(3)
       ..write(obj.successThreshold);
   }

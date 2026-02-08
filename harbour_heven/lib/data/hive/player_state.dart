@@ -9,14 +9,14 @@ class PlayerState {
   List<BuildingState> buildings;
 
   @HiveField(1)
-  Map<String, int> recources;
+  Map<String, int> resources;
 
   @HiveField(2)
   int lastTickAt;
 
   PlayerState({
     required this.buildings,
-    required this.recources,
+    required this.resources,
     required this.lastTickAt,
   });
 }

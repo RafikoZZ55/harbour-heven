@@ -1,11 +1,10 @@
 part of '../player.dart';
 
 extension PlayerBuildingOperator on Player {
- void upgradeBuilding({required BuildingType buildingType}) {
-  Building building = buildings.firstWhere((b) => b.type == buildingType);
-  if(!hasEnoughRecources(recources: building.price)) return;
-  
-  spendRecources(recources: building.price);
+ void upgradeBuilding({required int buildingIndex}) {
+  Building building = buildings[buildingIndex];
+  if(!hasEnoughRecources(recources: building.upgradeCost())) return;
+  spendRecources(recources: building.upgradeCost());
   building.level++;
  }
 
