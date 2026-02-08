@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:harbour_heven/data/hive/player_state.dart';
+import 'package:harbour_heven/data/model/building/tawern.dart';
 import 'package:harbour_heven/data/model/building/trading_port.dart';
 import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/model/enum/building_type.dart';
@@ -18,7 +19,7 @@ class PlayerController extends StateNotifier<Player> {
   Timer? _autoSaveTimer;
 
   bool _initialized = false;
-  static const int tickTimeInMilliseconds = 1 * 1000 * 5;
+  static const int tickTimeInMilliseconds = 1 * 1000 * 15;
 
   // ================= INIT =================
   Future<void> init() async {
@@ -43,7 +44,7 @@ class PlayerController extends StateNotifier<Player> {
 
   void _startAutoSave() {
     _autoSaveTimer = Timer.periodic(
-      const Duration(minutes: 1, seconds: 10),
+      const Duration(minutes: 1),
       (_) => _save(),
     );
   }
@@ -116,29 +117,39 @@ class PlayerController extends StateNotifier<Player> {
           as VoyagePort;
 
   // ================= ACTIONS =================
-  void trade(int index) {
+  void trade({required int index}) {
     state.trade(index: index);
     _save();
   }
 
-  void haggle(int index, int amount) {
+  void haggle({required int index,required int amount}) {
     state.haggle(index: index, amount: amount);
     _save();
   }
 
-  void buyVoyageShip(VoyageShipType type) {
+  void buyVoyageShip({required VoyageShipType type}) {
     state.buyVoyageShip(type: type);
     _save();
   }
 
-  void performVoyage(int index) {
+  void performVoyage({required int index}) {
     state.performVoyage(index: index);
     _save();
   }
 
-  void upgradeBuilding(int index) {
+  void upgradeBuilding({required int index}) {
     state.upgradeBuilding(buildingIndex: index);
     _save();
+  }
+
+  void produceRecource({required ResourceType resourceType}){
+    Player player = state.copyWith();
+    int tawernLevel = player.buildings.whereType<Tawern>().first.level;
+    int generatedAmount = 2 * tawernLevel;
+    player.addRecources(recources: {
+      resourceType: generatedAmount,
+    });
+    state = player;
   }
 
   // ================= DEBUG =================

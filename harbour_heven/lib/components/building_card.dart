@@ -28,7 +28,7 @@ class _BuildingCardState extends ConsumerState<BuildingCard> {
   void initState() {
     super.initState();
 
-    _timer = Timer.periodic(const Duration(microseconds: 850), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) return;
 
       setState(() {
@@ -127,7 +127,7 @@ class _BuildingCardState extends ConsumerState<BuildingCard> {
               alignment: Alignment.centerRight,
               child: FilledButton(
                 onPressed: () {
-                  playerController.upgradeBuilding(widget.buidingIndex);
+                  playerController.upgradeBuilding(index: widget.buidingIndex);
                 },
                 child: const Text('Upgrade'),
               ),

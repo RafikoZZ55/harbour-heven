@@ -25,7 +25,6 @@ class _ResourceDisplayState extends ConsumerState<ResourceDisplay> {
       padding: const EdgeInsets.all(2.5),
       child: Container(
         decoration: BoxDecoration(
-          color: sheme.primaryContainer,
           borderRadius: BorderRadius.all(Radius.elliptical(5, 5))
         ),
         child: Padding(
