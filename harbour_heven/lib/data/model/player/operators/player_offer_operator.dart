@@ -12,11 +12,13 @@ extension PlayerOfferOperator on Player {
   }
 
   int _calculateRewardSize(){
-    return (250 + 100 * (buildingLevel(buildingType: BuildingType.tradingPort)));
+    int baseReward = 100 + 100 * (buildingLevel(buildingType: BuildingType.tradingPort));
+    int bonus = Random().nextInt((baseReward/4).toInt()); 
+    return ((baseReward + bonus) * _getTradingPort().reputation).toInt();
   }
 
   int _claculeteOfferQueeSize(){
-    return 2 + (1* (_getTradingPort().level / 3).floor());
+    return 2 + (2* (_getTradingPort().level / 3).floor());
   }
 
   Map<ResourceType,int> _calculateOfferRewards({required OfferType offerType}) {
@@ -24,8 +26,8 @@ extension PlayerOfferOperator on Player {
     final tawernLevel = buildingLevel(buildingType: BuildingType.tawern);
     int recourceAmount;
     Map<ResourceType,int> rewards = {};
-    for(ResourceType recourceType in offerType.rewardType){ rewards[recourceType] = 0; }
-    int remainig = max(0,size - rewards.values.reduce((int a, int b) => a + b));
+    for(ResourceType recourceType in offerType.rewardType){ rewards[recourceType] = 0;}
+    int remainig = size;
 
     while(remainig > 0){
       for (final ResourceType type in offerType.rewardType) {
@@ -35,6 +37,7 @@ extension PlayerOfferOperator on Player {
         }
 
         rewards[type] = (rewards[type] ?? 0) + min(recourceAmount, remainig);
+        remainig -= recourceAmount;
         recourceAmount = 0;
       }
     }
@@ -43,7 +46,7 @@ extension PlayerOfferOperator on Player {
 
   Map<ResourceType,int> _claculateOfferPrice({required OfferType offerType}) {
     final int price;
-    final ResourceType  recourceType = ResourceType.values[_random.nextInt(ResourceType.values.length)];
+    final ResourceType recourceType = ResourceType.values[_random.nextInt(ResourceType.values.length)];
     switch(recourceType){
       case ResourceType.gold: price = (_calculateRewardSize() * 0.85 / 4).toInt();
       default: price = (_calculateRewardSize() * 0.85 / 4).toInt();
@@ -83,6 +86,7 @@ extension PlayerOfferOperator on Player {
   void trade({required int index}) {
     Offer offer = _getTradingPort().currentOffers[index];
     if (!hasEnoughRecources(recources: offer.price)) return;
+    if(offer.isCompleted) return;
     spendRecources(recources: offer.price);
     addRecources(recources: offer.reward);
     offer.isCompleted = true;

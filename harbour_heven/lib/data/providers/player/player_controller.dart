@@ -55,9 +55,7 @@ class PlayerController extends StateNotifier<Player> {
   
     final now = DateTime.now().millisecondsSinceEpoch;
     player.performCycle(cycles: 1);
-
-    //TODO: fix refreshing error !!!!
-    /*
+ 
     if (_getTradingPort(player: player).nextRefreshAt <= now) {
       player.generateOffers();
       _getTradingPort(player: player).nextRefreshAt =
@@ -69,7 +67,7 @@ class PlayerController extends StateNotifier<Player> {
       _getVoyagePort(player: player).nextRefreshAt =
           DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch;
     }
-    */
+
     player.lastTickAt = now;
     state = player;
   }
@@ -149,6 +147,12 @@ class PlayerController extends StateNotifier<Player> {
     player.addRecources(recources: {
       resourceType: generatedAmount,
     });
+    state = player;
+  }
+
+  void reRollOffers(){
+    Player player = state.copyWith();
+    player.reRollOffers();
     state = player;
   }
 

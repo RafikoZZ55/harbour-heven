@@ -7,7 +7,7 @@ extension PlayerVoyageOperator on Player {
   }
 
   int _calculateVoyageQueeSize(){
-    return 2 + (1 * (_getVoyagePort().level / 3).floor());
+    return 2 + (2 * (_getVoyagePort().level / 3).floor());
   }
 
   int _calculateFleetBasePoints(){
@@ -57,25 +57,20 @@ extension PlayerVoyageOperator on Player {
     int voyagePortLevel = _getVoyagePort().level;
     int baseRecources = 100 + 200 * voyagePortLevel + 250 * (difficulty.index + 1) + _random.nextInt((12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
     int fixedBonus = 100 * (difficulty.index + 1) + 75 * voyagePortLevel;
-    Map<ResourceType,int> recources = {
-      ResourceType.wood: 0,
-      ResourceType.fish: 0,
-      ResourceType.stone: 0,
-      ResourceType.gold: 0,
-    };
+    Map<ResourceType,int> recources = {};
+    int reamining = baseRecources;
+    for(ResourceType resourceType in voyageType.recources){ recources[resourceType] = 0;}
 
     for(ResourceType recource in voyageType.recources){
       recources[recource] = fixedBonus;
     }
 
     final List<ResourceType> activeRecuorces = voyageType.recources.toList();
-    while(baseRecources - recources.values.reduce((value, element) => value + element) > 0){
+    while(reamining > 0){
       ResourceType selectedRecource = activeRecuorces[_random.nextInt(activeRecuorces.length)];
-
-      recources[selectedRecource] = min(
-        baseRecources - recources.values.reduce((value, element) => value + element), 
-        (recources[selectedRecource] ?? 0) + _random.nextInt(((baseRecources - recources.values.reduce((value, element) => value + element) / 1.5).toInt()) + 10)
-      );
+      int reward = _random.nextInt(((baseRecources - recources.values.reduce((value, element) => value + element) / 1.5).toInt()) + 10);
+      recources[selectedRecource] = (recources[selectedRecource] ?? 0) + min(reamining, reward);
+      reamining -= reward;
     }
 
     return recources;

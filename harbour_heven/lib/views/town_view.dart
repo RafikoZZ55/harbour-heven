@@ -18,7 +18,6 @@ class _TownViewState extends ConsumerState<TownView> {
   @override
   Widget build(BuildContext context) {
     final Player player = ref.watch(playerProvider);
-    final playerController = ref.read(playerProvider.notifier);
 
     final List<Generator> generators =
         player.buildings.whereType<Generator>().toList();
@@ -33,14 +32,6 @@ class _TownViewState extends ConsumerState<TownView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ElevatedButton(
-              onPressed: () => playerController.reset(), 
-              child: Text("reset")
-            ),
-            ElevatedButton(
-              onPressed: () => playerController.addTestResources(), 
-              child: Text("test")
-            ),
 
             const Text(
               'Special',
