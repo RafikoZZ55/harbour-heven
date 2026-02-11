@@ -93,7 +93,7 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
               borderRadius: BorderRadius.circular(14),
               onTap: () {
                 playerController.produceRecource(
-                  resourceType: ResourceType.stone,
+                  resourceType: ResourceType.gold,
                 );
               },
               child: SizedBox(

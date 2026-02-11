@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:harbour_heven/data/model/barghter/offer.dart';
 import 'package:harbour_heven/data/model/building/trading_port.dart';
-import 'package:harbour_heven/data/providers/player/player_controller.dart';
 import 'package:harbour_heven/data/providers/player/player_provider.dart';
+import 'package:harbour_heven/pages/offer_page.dart';
 
 class OfferCard extends ConsumerStatefulWidget {
   const OfferCard({ super.key, required this.index });
@@ -16,7 +16,6 @@ class OfferCard extends ConsumerStatefulWidget {
 class _OfferCardState extends ConsumerState<OfferCard> {
   @override
   Widget build(BuildContext context) {
-    PlayerController playerController = ref.read(playerProvider.notifier);
     Offer offer = ref.watch(
       playerProvider.select((p) => p.buildings.whereType<TradingPort>().first.currentOffers[widget.index])
     );
@@ -46,11 +45,20 @@ class _OfferCardState extends ConsumerState<OfferCard> {
             }),
 
             ElevatedButton(
-              onPressed: () => playerController.trade(index: widget.index),
+              onPressed: () => Navigator.push(
+                context, 
+                PageRouteBuilder(
+                  pageBuilder: (
+                    context, 
+                    animation, 
+                    secondaryAnimation
+                  ) => OfferPage(offerIndex: widget.index)
+                )
+              ),
               style: ElevatedButton.styleFrom(
                 fixedSize: const Size(double.infinity, 50)
               ), 
-              child: Text(offer.isCompleted ? "traded" : "Trade")
+              child: Text(offer.isCompleted ? "Completed" : "Huggle")
             ),
 
           ],

@@ -55,7 +55,7 @@ class PlayerController extends StateNotifier<Player> {
   
     final now = DateTime.now().millisecondsSinceEpoch;
     player.performCycle(cycles: 1);
- 
+
     if (_getTradingPort(player: player).nextRefreshAt <= now) {
       player.generateOffers();
       _getTradingPort(player: player).nextRefreshAt =
@@ -116,27 +116,37 @@ class PlayerController extends StateNotifier<Player> {
 
   // ================= ACTIONS =================
   void trade({required int index}) {
-    state.trade(index: index);
+    Player player = state.copyWith();
+    player.trade(index: index);
+    state = player;
     _save();
   }
 
   void haggle({required int index,required int amount}) {
-    state.haggle(index: index, amount: amount);
+     Player player = state.copyWith();
+    player.haggle(index: index, amount: amount);
+    state = player;
     _save();
   }
 
   void buyVoyageShip({required VoyageShipType type}) {
-    state.buyVoyageShip(type: type);
+     Player player = state.copyWith();
+    player.buyVoyageShip(type: type);
+    state = player;
     _save();
   }
 
   void performVoyage({required int index}) {
-    state.performVoyage(index: index);
+     Player player = state.copyWith();
+    player.performVoyage(index: index);
+    state = player;
     _save();
   }
 
   void upgradeBuilding({required int index}) {
-    state.upgradeBuilding(buildingIndex: index);
+     Player player = state.copyWith();
+    player.upgradeBuilding(buildingIndex: index);
+    state = player;
     _save();
   }
 
@@ -154,21 +164,12 @@ class PlayerController extends StateNotifier<Player> {
     Player player = state.copyWith();
     player.reRollOffers();
     state = player;
+    _save();
   }
 
   // ================= DEBUG =================
   void reset() {
     state = Player.empty();
-    _save();
-  }
-
-  void addTestResources() {
-    state.addRecources(
-      recources: {
-        ResourceType.wood: 10,
-        ResourceType.stone: 10,
-      },
-    );
     _save();
   }
 

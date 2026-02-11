@@ -78,9 +78,9 @@ extension PlayerOfferOperator on Player {
   void reRollOffers(){
     Map<ResourceType,int> cost = {ResourceType.gold: 5};
     if(hasEnoughRecources(recources: cost)){
-    spendRecources(recources: cost);
+      spendRecources(recources: cost);
+      generateOffers();
     }
-    generateOffers();
   }
 
   void trade({required int index}) {
@@ -90,24 +90,33 @@ extension PlayerOfferOperator on Player {
     spendRecources(recources: offer.price);
     addRecources(recources: offer.reward);
     offer.isCompleted = true;
+    _getTradingPort().currentOffers = List<Offer>.from(_getTradingPort().currentOffers);
   }
-
-  void haggle({required int index, required int amount}){
+  
+  void haggle({required int index, required int amount}) {
     TradingPort tradingPort = _getTradingPort();
     Offer offer = tradingPort.currentOffers[index];
-    if(!offer.canHaggle) return;
 
-    if(amount <= offer.maxHaggleGain) {
-      offer.price = {offer.price.keys.first: offer.price.values.first - amount};
+    if (!offer.canHaggle) return;
+
+    int currentPrice = offer.price.values.first;
+    int maxHaggle = offer.maxHaggleGain;
+
+    if (amount <= maxHaggle) {
+      int newPrice = max(0, currentPrice - amount);
+      offer.price = {offer.price.keys.first: newPrice};
       offer.canHaggle = false;
       return;
     }
 
-    offer.patience += (amount - offer.maxHaggleGain) / offer.maxHaggleGain * 0.9;
-    if (offer.patience >= 1){
+
+    offer.patience += ((amount - maxHaggle) / currentPrice * 0.5).clamp(0.0,1.0);
+
+    if (offer.patience >= 1) {
       offer.canHaggle = false;
-      offer.isCompleted = true;
-      return;
+      offer.isCompleted = true; 
     }
   }
+
+
 }

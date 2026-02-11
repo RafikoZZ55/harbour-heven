@@ -21,4 +21,25 @@ class Offer {
     required this.canHaggle,
     required this.patience
   });
+
+
+  Offer copyWith({
+    OfferType? type,
+    Map<ResourceType, int>? reward,
+    Map<ResourceType,int>? price,
+    bool? isCompleted,
+    int? maxHaggleGain,
+    bool? canHaggle,
+    double? patience
+  }){
+    return Offer(
+      type: type ?? this.type, 
+      reward: reward ?? Map.from(this.reward), 
+      price: price ?? Map.from(this.price), 
+      isCompleted: isCompleted ?? this.isCompleted, 
+      maxHaggleGain: maxHaggleGain ?? this.maxHaggleGain, 
+      canHaggle: canHaggle ?? this.canHaggle, 
+      patience: patience ?? this.patience
+    );
+  }
 }

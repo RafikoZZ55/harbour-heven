@@ -53,28 +53,46 @@ extension PlayerVoyageOperator on Player {
     else {return DifficultyType.extreme;}
   }
 
-  Map<ResourceType, int> _calculateVoyageRecources({required VoyageType voyageType, required DifficultyType difficulty}) {
-    int voyagePortLevel = _getVoyagePort().level;
-    int baseRecources = 100 + 200 * voyagePortLevel + 250 * (difficulty.index + 1) + _random.nextInt((12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
-    int fixedBonus = 100 * (difficulty.index + 1) + 75 * voyagePortLevel;
-    Map<ResourceType,int> recources = {};
-    int reamining = baseRecources;
-    for(ResourceType resourceType in voyageType.recources){ recources[resourceType] = 0;}
+Map<ResourceType, int> _calculateVoyageResources({
+  required VoyageType voyageType,
+  required DifficultyType difficulty,
+}) {
+  int voyagePortLevel = _getVoyagePort().level;
 
-    for(ResourceType recource in voyageType.recources){
-      recources[recource] = fixedBonus;
-    }
+  int baseResources = 100 +
+      200 * voyagePortLevel +
+      250 * (difficulty.index + 1) +
+      _random.nextInt(
+          (12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
 
-    final List<ResourceType> activeRecuorces = voyageType.recources.toList();
-    while(reamining > 0){
-      ResourceType selectedRecource = activeRecuorces[_random.nextInt(activeRecuorces.length)];
-      int reward = _random.nextInt(((baseRecources - recources.values.reduce((value, element) => value + element) / 1.5).toInt()) + 10);
-      recources[selectedRecource] = (recources[selectedRecource] ?? 0) + min(reamining, reward);
-      reamining -= reward;
-    }
+  int fixedBonus = 100 * (difficulty.index + 1) + 75 * voyagePortLevel;
 
-    return recources;
+  Map<ResourceType, int> resources = {};
+  int numResources = voyageType.resources.length;
+
+  for (ResourceType r in voyageType.resources) {
+    resources[r] = fixedBonus;
   }
+
+  int remaining = baseResources - (fixedBonus * numResources);
+  if (remaining <= 0) return resources;
+
+
+  while (remaining > 0) {
+    for (var r in voyageType.resources) {
+      if (remaining <= 0) break;
+
+      int maxReward = (remaining / voyageType.resources.length).ceil();
+      int reward = _random.nextInt(maxReward) + 1;
+
+      resources[r] = (resources[r] ?? 0) + reward;
+      remaining -= reward;
+    }
+  }
+
+  return resources;
+}
+
 
   int _calculateVoyageSuccesThreshold({required DifficultyType difficulty}){
       int tawernLevel = buildingLevel(buildingType: BuildingType.tawern);
@@ -89,7 +107,7 @@ extension PlayerVoyageOperator on Player {
     return Voyage(
       type: voyageType,
       difficulty: difficulty, 
-      recources: _calculateVoyageRecources(voyageType: voyageType, difficulty: difficulty), 
+      recources: _calculateVoyageResources(voyageType: voyageType, difficulty: difficulty), 
       successThreshold: _calculateVoyageSuccesThreshold(difficulty: difficulty)
     );
   }

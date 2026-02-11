@@ -13,15 +13,15 @@ enum VoyageType {
   tradeConvoy({ResourceType.gold,ResourceType.stone}),
   bigTradeTrip({ResourceType.fish,ResourceType.gold,ResourceType.stone,ResourceType.wood});
 
-  final Set<ResourceType> recources;
-  const VoyageType(this.recources);
+  final Set<ResourceType> resources;
+  const VoyageType(this.resources);
 
   static VoyageType getRandom() {
     final values = VoyageType.values;
     return values[Random().nextInt(values.length)];
   }
 
-  bool gives(ResourceType recource) => recources.contains(recource);
+  bool gives(ResourceType recource) => resources.contains(recource);
 
   static bool checkIfExists({required String voyageType}){
     return VoyageType.values.any((e) => e.name == voyageType);

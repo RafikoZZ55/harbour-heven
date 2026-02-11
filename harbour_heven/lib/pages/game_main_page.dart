@@ -15,10 +15,13 @@ class GameMainPage extends ConsumerStatefulWidget {
 class _GameMainPageState extends ConsumerState<GameMainPage> {
   @override
   Widget build(BuildContext context) {
+
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
         title: const ResourceBar(),
+        backgroundColor: colorScheme.primary,
       ),
       body: DefaultTabController(
         length: 4,

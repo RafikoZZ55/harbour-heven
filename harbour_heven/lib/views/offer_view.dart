@@ -29,7 +29,7 @@ class _OfferViewState extends ConsumerState<OfferView> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Trading Port"),
-            ElevatedButton(onPressed: () => playerController.reRollOffers, child: Text("reRoll -5 gold"))
+            ElevatedButton(onPressed: () => playerController.reRollOffers(), child: Text("reRoll -5 gold"))
           ],
         ),
 
