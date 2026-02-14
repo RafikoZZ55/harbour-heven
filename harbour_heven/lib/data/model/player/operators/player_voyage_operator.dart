@@ -126,10 +126,17 @@ Map<ResourceType, int> _calculateVoyageResources({
   }
 
   void buyVoyageShip({required VoyageShipType type}){
-    if(hasEnoughRecources(recources: type.price)){
-      spendRecources(recources: type.price);
+    if(hasEnoughRecources(recources: type.buyPrice)){
+      spendRecources(recources: type.buyPrice);
       VoyagePort port = _getVoyagePort();
       port.voyageShips[type] = (port.voyageShips[type] ?? 0) + 1 ;
+    }
+  }
+
+  void sellVoyageShip({required VoyageShipType type}){
+    if(_getVoyagePort().voyageShips[type]! > 0){
+      addRecources(recources: type.sellPrice);
+      _getVoyagePort().voyageShips[type] = (_getVoyagePort().voyageShips[type] ?? 1) - 1;
     }
   }
 

@@ -115,6 +115,14 @@ class PlayerController extends StateNotifier<Player> {
           as VoyagePort;
 
   // ================= ACTIONS =================
+
+  void sellVoyageShip({required VoyageShipType voyageShipType}){
+    Player player = state.copyWith();
+    player.sellVoyageShip(type: voyageShipType);
+    state = player;
+    _save();
+  }
+
   void trade({required int index}) {
     Player player = state.copyWith();
     player.trade(index: index);
@@ -163,6 +171,14 @@ class PlayerController extends StateNotifier<Player> {
   void reRollOffers(){
     Player player = state.copyWith();
     player.reRollOffers();
+    state = player;
+    _save();
+  }
+
+  
+  void reRollVoyages(){
+    Player player = state.copyWith();
+    player.reRollVoyages();
     state = player;
     _save();
   }

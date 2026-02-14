@@ -30,7 +30,7 @@ class _ResourceDisplayState extends ConsumerState<ResourceDisplay> {
         child: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Text(
-            "${widget.resourceType.name}: ${player.resources[widget.resourceType]}/${player.calculateCapacity(resourceType: widget.resourceType)}",
+            "${widget.resourceType.icon}: ${player.resources[widget.resourceType]}/${player.calculateCapacity(resourceType: widget.resourceType)}",
             style: TextStyle(
               color: sheme.onPrimaryContainer,
               fontSize: 15
