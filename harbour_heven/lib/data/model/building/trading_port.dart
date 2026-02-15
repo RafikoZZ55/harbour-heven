@@ -33,5 +33,19 @@ class TradingPort extends Building {
     };
     return cost;
   }
+
+  TradingPort copyWith({
+    int? level,
+    double? reputation,
+    List<Offer>? currentOffers,
+    int? nextRefreshAt,
+  }) {
+    return TradingPort(
+      level: level ?? this.level,
+      reputation: reputation ?? this.reputation,
+      currentOffers: currentOffers ?? List.from(this.currentOffers),
+      nextRefreshAt: nextRefreshAt ?? this.nextRefreshAt,
+    );
+  }
   
 }

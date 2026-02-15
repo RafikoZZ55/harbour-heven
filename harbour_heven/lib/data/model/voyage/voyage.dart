@@ -16,4 +16,19 @@ class Voyage {
     required this.successThreshold,
   });
 
+
+  Voyage copyWith({
+    VoyageType? type,
+    DifficultyType? difficulty,
+    Map<ResourceType,int>? recources,
+    int? successThreshold,
+  }){
+    return Voyage(
+      type: type ?? this.type, 
+      difficulty: difficulty ?? this.difficulty, 
+      recources: recources ??  Map.from(this.recources), 
+      successThreshold: successThreshold ?? this.successThreshold
+    );
+  }
+
 }

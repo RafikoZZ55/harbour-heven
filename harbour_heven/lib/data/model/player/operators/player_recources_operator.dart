@@ -3,12 +3,16 @@ part of '../player.dart';
 extension PlayerRecourcesOperator on Player {
 
     void _add({required ResourceType recourceType,required int amount}) {
-    resources[recourceType] = (resources[recourceType] ?? 0) + amount.clamp(0, calculateCapacity(resourceType: recourceType) - (resources[recourceType] ?? 0)).toInt();
+    final newResources = Map<ResourceType, int>.from(resources);
+    newResources[recourceType] = (newResources[recourceType] ?? 0) + amount.clamp(0, calculateCapacity(resourceType: recourceType) - (newResources[recourceType] ?? 0)).toInt();
+    resources = newResources;
   }
 
   void _spend({required ResourceType recourceType,required int amount}) {
     if(!_hasEnough(recourceType: recourceType,amount: amount)) return;
-    resources[recourceType] = (resources[recourceType] ?? 0) - amount;
+    final newResources = Map<ResourceType, int>.from(resources);
+    newResources[recourceType] = (newResources[recourceType] ?? 0) - amount;
+    resources = newResources;
   }
 
   bool _hasEnough({required ResourceType recourceType,required int amount}) {

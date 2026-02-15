@@ -22,24 +22,29 @@ class _OfferViewState extends ConsumerState<OfferView> {
     );
 
     return Padding(
-      padding: const EdgeInsets.all(5),
+      padding: const EdgeInsets.all(8.00),
       child: Column(
         children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Trading Port"),
-            ElevatedButton(onPressed: () => playerController.reRollOffers(), child: Text("reRoll -5 gold"))
+            Text(
+              "Trading Port",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            FilledButton(
+              onPressed: () => playerController.reRollOffers(),
+              child: Text("Re-roll -5 gold"))
           ],
         ),
 
         Expanded(
-          child: GridView.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: 5,
-            crossAxisSpacing: 5,
-            scrollDirection: Axis.vertical,
-            children: List.generate(offers.length, (index) => OfferCard(index: index,)),
+          child: ListView(
+            semanticChildCount: offers.length,
+            children: offers.map((e) => OfferCard(index: offers.indexOf(e))).toList(),
           ),
         ),
         ],

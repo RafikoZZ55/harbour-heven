@@ -27,5 +27,6 @@ class FishingDock extends Generator {
     return cost;
   }
   
+  
 
 }

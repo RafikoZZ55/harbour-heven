@@ -113,8 +113,15 @@ Map<ResourceType, int> _calculateVoyageResources({
   }
 
   void generateVoyages(){
+    VoyagePort port = _getVoyagePort();
     List<Voyage> voyages = List.generate(_calculateVoyageQueeSize(), (_) => _generateVoyage());
-    _getVoyagePort().currentVoyages = voyages;
+    
+    // Replace the voyage port with new voyages
+    int portIndex = buildings.indexOf(port);
+    VoyagePort newPort = port.copyWith(currentVoyages: voyages);
+    List<Building> newBuildings = List.from(buildings);
+    newBuildings[portIndex] = newPort;
+    buildings = newBuildings;
   }
 
   void reRollVoyages(){
@@ -129,14 +136,33 @@ Map<ResourceType, int> _calculateVoyageResources({
     if(hasEnoughRecources(recources: type.buyPrice)){
       spendRecources(recources: type.buyPrice);
       VoyagePort port = _getVoyagePort();
-      port.voyageShips[type] = (port.voyageShips[type] ?? 0) + 1 ;
+      
+      Map<VoyageShipType, int> newVoyageShips = Map.from(port.voyageShips);
+      newVoyageShips[type] = (newVoyageShips[type] ?? 0) + 1;
+      
+      // Replace the voyage port with updated ships
+      int portIndex = buildings.indexOf(port);
+      VoyagePort newPort = port.copyWith(voyageShips: newVoyageShips);
+      List<Building> newBuildings = List.from(buildings);
+      newBuildings[portIndex] = newPort;
+      buildings = newBuildings;
     }
   }
 
   void sellVoyageShip({required VoyageShipType type}){
-    if(_getVoyagePort().voyageShips[type]! > 0){
+    VoyagePort port = _getVoyagePort();
+    if((port.voyageShips[type] ?? 0) > 0){
       addRecources(recources: type.sellPrice);
-      _getVoyagePort().voyageShips[type] = (_getVoyagePort().voyageShips[type] ?? 1) - 1;
+      
+      Map<VoyageShipType, int> newVoyageShips = Map.from(port.voyageShips);
+      newVoyageShips[type] = (newVoyageShips[type] ?? 1) - 1;
+      
+      // Replace the voyage port with updated ships
+      int portIndex = buildings.indexOf(port);
+      VoyagePort newPort = port.copyWith(voyageShips: newVoyageShips);
+      List<Building> newBuildings = List.from(buildings);
+      newBuildings[portIndex] = newPort;
+      buildings = newBuildings;
     }
   }
 
@@ -146,15 +172,24 @@ Map<ResourceType, int> _calculateVoyageResources({
     Voyage voyage = port.currentVoyages[index];
     bool isSucces = _random.nextInt(voyage.successThreshold) <= _calculateFleetBasePoints();
 
+    Map<VoyageShipType, int> newVoyageShips = Map.from(port.voyageShips);
     for(VoyageShipType type in port.voyageShips.keys){
       int returningShips = 0;
       for (var i = 0; i < (port.voyageShips[type] ?? 0); i++) {
         if( _random.nextDouble() <= (type.returnRate / (isSucces ? 1 : 2))) returningShips++;
       }
-      port.voyageShips[type] = returningShips;
+      newVoyageShips[type] = returningShips;
     }
 
     if(isSucces) addRecources(recources: port.currentVoyages[index].recources);
+    
+    // Replace the voyage port with updated ships and regenerate voyages
+    int portIndex = buildings.indexOf(port);
+    VoyagePort newPort = port.copyWith(voyageShips: newVoyageShips);
+    List<Building> newBuildings = List.from(buildings);
+    newBuildings[portIndex] = newPort;
+    buildings = newBuildings;
+    
     reRollVoyages();
   }
 

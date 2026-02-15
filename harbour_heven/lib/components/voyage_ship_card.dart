@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:harbour_heven/components/resource_display_card.dart';
 import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
-import 'package:harbour_heven/data/providers/player/player_controller.dart';
 import 'package:harbour_heven/data/providers/player/player_provider.dart';
 class VoyageShipCard extends ConsumerStatefulWidget {
   const VoyageShipCard({

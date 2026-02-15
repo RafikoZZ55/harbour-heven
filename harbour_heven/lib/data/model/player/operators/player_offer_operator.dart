@@ -72,7 +72,11 @@ extension PlayerOfferOperator on Player {
   void generateOffers() {
     final port = _getTradingPort();
     List<Offer> offers = List.generate(_claculeteOfferQueeSize(), (_) => _generateOffer());
-    port.currentOffers = offers;
+    int portIndex = buildings.indexOf(port);
+    TradingPort newPort = port.copyWith(currentOffers: offers);
+    List<Building> newBuildings = List.from(buildings);
+    newBuildings[portIndex] = newPort;
+    buildings = newBuildings;
   }
 
   void reRollOffers(){
@@ -83,40 +87,86 @@ extension PlayerOfferOperator on Player {
     }
   }
 
-  void trade({required int index}) {
-    Offer offer = _getTradingPort().currentOffers[index];
+  void _trade({required int index}) {
+    TradingPort port = _getTradingPort();
+    if (index >= port.currentOffers.length || index < 0) return;
+    
+    Offer offer = port.currentOffers[index];
     if (!hasEnoughRecources(recources: offer.price)) return;
     if(offer.isCompleted) return;
+    
     spendRecources(recources: offer.price);
     addRecources(recources: offer.reward);
-    offer.isCompleted = true;
-    _getTradingPort().currentOffers = List<Offer>.from(_getTradingPort().currentOffers);
+    
+    Offer completedOffer = offer.copyWith(isCompleted: true);
+    List<Offer> updatedOffers = List.from(port.currentOffers);
+    updatedOffers[index] = completedOffer;
+
+    TradingPort newPort = port.copyWith(currentOffers: updatedOffers);
+    int portIndex = buildings.indexOf(port);
+    List<Building> newBuildings = List.from(buildings);
+    newBuildings[portIndex] = newPort;
+    buildings = newBuildings;
   }
-  
-  void haggle({required int index, required int amount}) {
-    TradingPort tradingPort = _getTradingPort();
-    Offer offer = tradingPort.currentOffers[index];
-
-    if (!offer.canHaggle) return;
-
-    int currentPrice = offer.price.values.first;
-    int maxHaggle = offer.maxHaggleGain;
-
-    if (amount <= maxHaggle) {
-      int newPrice = max(0, currentPrice - amount);
-      offer.price = {offer.price.keys.first: newPrice};
-      offer.canHaggle = false;
-      return;
-    }
 
 
-    offer.patience += ((amount - maxHaggle) / currentPrice * 0.5).clamp(0.0,1.0);
+  void haggle({required int index, required int hagglePrice}) {
+  TradingPort port = _getTradingPort();
+  if (index < 0 || index >= port.currentOffers.length) return;
 
-    if (offer.patience >= 1) {
-      offer.canHaggle = false;
-      offer.isCompleted = true; 
-    }
+  Offer offer = port.currentOffers[index];
+  if (!offer.canHaggle || offer.isCompleted) return;
+
+  int currentPrice = offer.price.values.first;
+  int discount = currentPrice - hagglePrice;
+  int maxHaggle = offer.maxHaggleGain;
+
+  if (discount <= maxHaggle) {
+    Offer updatedOffer = offer.copyWith(
+      price: {offer.price.keys.first: hagglePrice},
+      canHaggle: false,
+    );
+
+    _updateOffer(index, updatedOffer);
+
+    _trade(index: index);
+    return;
   }
+
+  double newPatience = offer.patience +
+      ((discount - maxHaggle) / currentPrice * 0.5).clamp(0.0, 1.0);
+
+  Offer updatedOffer;
+
+  if (newPatience >= 1) {
+    updatedOffer = offer.copyWith(
+      patience: 1,
+      canHaggle: false,
+      isCompleted: true,
+    );
+  } else {
+    updatedOffer = offer.copyWith(
+      patience: newPatience,
+    );
+  }
+
+  _updateOffer(index, updatedOffer);
+}
+
+void _updateOffer(int index, Offer updatedOffer) {
+  TradingPort port = _getTradingPort();
+
+  List<Offer> updatedOffers = List.from(port.currentOffers);
+  updatedOffers[index] = updatedOffer;
+
+  TradingPort newPort = port.copyWith(currentOffers: updatedOffers);
+
+  int portIndex = buildings.indexOf(port);
+  List<Building> newBuildings = List.from(buildings);
+  newBuildings[portIndex] = newPort;
+
+  buildings = newBuildings;
+}
 
 
 }

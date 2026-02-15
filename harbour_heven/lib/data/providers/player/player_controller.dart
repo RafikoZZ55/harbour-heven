@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:harbour_heven/data/hive/player_state.dart';
+import 'package:harbour_heven/data/model/building/building.dart';
 import 'package:harbour_heven/data/model/building/tawern.dart';
 import 'package:harbour_heven/data/model/building/trading_port.dart';
 import 'package:harbour_heven/data/model/building/voyage_port.dart';
@@ -51,21 +52,39 @@ class PlayerController extends StateNotifier<Player> {
 
   // ================= TICK =================
   void _onTick() {
-    Player player = state.copyWith(resources: Map.from(state.resources));
+    Player player = state.copyWith();
   
     final now = DateTime.now().millisecondsSinceEpoch;
     player.performCycle(cycles: 1);
 
-    if (_getTradingPort(player: player).nextRefreshAt <= now) {
+    TradingPort tradingPort = player.buildings.firstWhere((b) => b.type == BuildingType.tradingPort) as TradingPort;
+    if (tradingPort.nextRefreshAt <= now) {
       player.generateOffers();
-      _getTradingPort(player: player).nextRefreshAt =
-          DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch;
+      
+      // Update trading port with new nextRefreshAt time after generating offers
+      TradingPort updatedPort = player.buildings.firstWhere((b) => b.type == BuildingType.tradingPort) as TradingPort;
+      int portIndex = player.buildings.indexOf(updatedPort);
+      TradingPort refreshedPort = updatedPort.copyWith(
+        nextRefreshAt: DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch
+      );
+      List<Building> updatedBuildings = List.from(player.buildings);
+      updatedBuildings[portIndex] = refreshedPort;
+      player.buildings = updatedBuildings;
     }
 
-    if (_getVoyagePort(player: player).nextRefreshAt <= now) {
+    VoyagePort voyagePort = player.buildings.firstWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
+    if (voyagePort.nextRefreshAt <= now) {
       player.generateVoyages();
-      _getVoyagePort(player: player).nextRefreshAt =
-          DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch;
+      
+      // Update voyage port with new nextRefreshAt time after generating voyages
+      VoyagePort updatedPort = player.buildings.firstWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
+      int portIndex = player.buildings.indexOf(updatedPort);
+      VoyagePort refreshedPort = updatedPort.copyWith(
+        nextRefreshAt: DateTime.now().add(const Duration(hours: 1)).millisecondsSinceEpoch
+      );
+      List<Building> updatedBuildings = List.from(player.buildings);
+      updatedBuildings[portIndex] = refreshedPort;
+      player.buildings = updatedBuildings;
     }
 
     player.lastTickAt = now;
@@ -76,7 +95,9 @@ class PlayerController extends StateNotifier<Player> {
   void _applyOfflineProgress() {
     final cycles = _calculateOfflineCycles();
     if (cycles > 0) {
-      state.performCycle(cycles: cycles);
+      Player player = state.copyWith();
+      player.performCycle(cycles: cycles);
+      state = player;
     }
   }
 
@@ -106,13 +127,8 @@ class PlayerController extends StateNotifier<Player> {
   }
 
   // ================= HELPERS =================
-  TradingPort _getTradingPort({required Player player}) =>
-      player.buildings.firstWhere((b) => b.type == BuildingType.tradingPort)
-          as TradingPort;
-
-  VoyagePort _getVoyagePort({required Player player}) =>
-      player.buildings.firstWhere((b) => b.type == BuildingType.voyagePort)
-          as VoyagePort;
+  // Helper methods removed - all state mutations now happen through Player operators
+  // which properly create new instances for Riverpod detection
 
   // ================= ACTIONS =================
 
@@ -123,22 +139,15 @@ class PlayerController extends StateNotifier<Player> {
     _save();
   }
 
-  void trade({required int index}) {
+  void trade({required int index, required int haggledPrice}) {
     Player player = state.copyWith();
-    player.trade(index: index);
-    state = player;
-    _save();
-  }
-
-  void haggle({required int index,required int amount}) {
-     Player player = state.copyWith();
-    player.haggle(index: index, amount: amount);
+    player.haggle(index: index, hagglePrice: haggledPrice);
     state = player;
     _save();
   }
 
   void buyVoyageShip({required VoyageShipType type}) {
-     Player player = state.copyWith();
+    Player player = state.copyWith();
     player.buyVoyageShip(type: type);
     state = player;
     _save();
@@ -166,6 +175,7 @@ class PlayerController extends StateNotifier<Player> {
       resourceType: generatedAmount,
     });
     state = player;
+    _save();
   }
 
   void reRollOffers(){

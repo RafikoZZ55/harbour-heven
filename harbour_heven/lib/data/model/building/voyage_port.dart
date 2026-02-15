@@ -39,4 +39,18 @@ class VoyagePort extends Building {
     return cost;
   }
   
+  VoyagePort copyWith({
+    int? level, 
+    Map<VoyageShipType, int>? voyageShips, 
+    List<Voyage>? currentVoyages, 
+    int? nextRefreshAt
+  }){
+    return VoyagePort(
+      level: level ?? this.level,
+      voyageShips: voyageShips ?? Map.from(this.voyageShips),
+      currentVoyages: currentVoyages ?? List.from(this.currentVoyages),
+      nextRefreshAt: nextRefreshAt ?? this.nextRefreshAt,
+    );
+  }
+  
 }
