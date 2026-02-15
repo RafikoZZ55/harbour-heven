@@ -17,6 +17,13 @@ class OfferCard extends ConsumerStatefulWidget {
 class _OfferCardState extends ConsumerState<OfferCard> {
       int? _haggledPrice;
       Offer? _lastOffer;
+
+      String _getStatus(Offer offer){
+        if(offer.isCompleted) {return "Completed";}
+        if(offer.isFailed) {return "Failed";}
+        else {return "Trade";}
+      }
+
   @override
   Widget build(BuildContext context) {
     PlayerController playerController = ref.read(playerProvider.notifier);
@@ -157,7 +164,7 @@ return Card(
                         index: widget.index, 
                         haggledPrice: _haggledPrice!,
                       ): null,
-                      child: Text(offer.isCompleted  ? "Completed" : "Trade"),
+                      child: Text(_getStatus(offer)),
                     ),
                   ),
                 ],

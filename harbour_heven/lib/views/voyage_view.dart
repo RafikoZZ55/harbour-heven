@@ -37,7 +37,7 @@ class _VoyageViewState extends ConsumerState<VoyageView> {
               ),
               FilledButton(
                 onPressed: () => playerController.reRollVoyages(),
-                child: const Text("Re-roll voyages"),
+                child: const Text("Re-roll voyages -5 gold"),
               )
             ],
           ),

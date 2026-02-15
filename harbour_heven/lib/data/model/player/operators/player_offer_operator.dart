@@ -66,6 +66,7 @@ extension PlayerOfferOperator on Player {
       maxHaggleGain: maxHaggleGain,
       canHaggle: true,
       patience: 0,
+      isFailed: false,
     );
   }
 
@@ -115,7 +116,7 @@ extension PlayerOfferOperator on Player {
   if (index < 0 || index >= port.currentOffers.length) return;
 
   Offer offer = port.currentOffers[index];
-  if (!offer.canHaggle || offer.isCompleted) return;
+  if (!offer.canHaggle || offer.isCompleted || offer.isFailed) return;
 
   int currentPrice = offer.price.values.first;
   int discount = currentPrice - hagglePrice;
@@ -125,6 +126,7 @@ extension PlayerOfferOperator on Player {
     Offer updatedOffer = offer.copyWith(
       price: {offer.price.keys.first: hagglePrice},
       canHaggle: false,
+      isFailed: false,
     );
 
     _updateOffer(index, updatedOffer);
@@ -134,7 +136,7 @@ extension PlayerOfferOperator on Player {
   }
 
   double newPatience = offer.patience +
-      ((discount - maxHaggle) / currentPrice * 0.5).clamp(0.0, 1.0);
+      ((discount - maxHaggle) / currentPrice * 2).clamp(0.0, 1.0);
 
   Offer updatedOffer;
 
@@ -142,7 +144,8 @@ extension PlayerOfferOperator on Player {
     updatedOffer = offer.copyWith(
       patience: 1,
       canHaggle: false,
-      isCompleted: true,
+      isCompleted: false,
+      isFailed: true
     );
   } else {
     updatedOffer = offer.copyWith(

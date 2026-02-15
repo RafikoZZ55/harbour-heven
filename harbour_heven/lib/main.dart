@@ -39,7 +39,7 @@ class _MainState extends ConsumerState<Main> {
     return MaterialApp(
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.cyanAccent, 
+          seedColor: const Color.fromARGB(255, 0, 255, 76), 
           contrastLevel: 0,
           brightness: Brightness.light,
         ),

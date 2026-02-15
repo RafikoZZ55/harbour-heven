@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:harbour_heven/components/resource_display_card.dart';
+import 'package:harbour_heven/components/voyage_result_dialog.dart';
 import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/voyage/voyage.dart';
+import 'package:harbour_heven/data/model/voyage/voyage_result.dart';
 import 'package:harbour_heven/data/providers/player/player_controller.dart';
 import 'package:harbour_heven/data/providers/player/player_provider.dart';
 class VoyageCard extends ConsumerStatefulWidget {
@@ -115,7 +117,15 @@ class _VoyageCardState extends ConsumerState<VoyageCard> {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed: () => playerController.performVoyage(index: widget.index),
+                onPressed: () {
+                final VoyageResult? voyageResult = playerController.performVoyage(index: widget.index);
+                if(voyageResult == null) return;
+                
+                showDialog(
+                  context: context, 
+                  builder: (context) =>  VoyageResultDialog(voyageResult: voyageResult),
+                );
+                },
                 child: const Text("Perform Voyage"),
               ),
             ),

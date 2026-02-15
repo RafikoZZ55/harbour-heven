@@ -140,7 +140,6 @@ Map<ResourceType, int> _calculateVoyageResources({
       Map<VoyageShipType, int> newVoyageShips = Map.from(port.voyageShips);
       newVoyageShips[type] = (newVoyageShips[type] ?? 0) + 1;
       
-      // Replace the voyage port with updated ships
       int portIndex = buildings.indexOf(port);
       VoyagePort newPort = port.copyWith(voyageShips: newVoyageShips);
       List<Building> newBuildings = List.from(buildings);
@@ -157,7 +156,6 @@ Map<ResourceType, int> _calculateVoyageResources({
       Map<VoyageShipType, int> newVoyageShips = Map.from(port.voyageShips);
       newVoyageShips[type] = (newVoyageShips[type] ?? 1) - 1;
       
-      // Replace the voyage port with updated ships
       int portIndex = buildings.indexOf(port);
       VoyagePort newPort = port.copyWith(voyageShips: newVoyageShips);
       List<Building> newBuildings = List.from(buildings);
@@ -166,24 +164,26 @@ Map<ResourceType, int> _calculateVoyageResources({
     }
   }
 
-  void performVoyage({required int index}){
+  VoyageResult? performVoyage({required int index}){
     VoyagePort port = _getVoyagePort();
-    if(index >= port.currentVoyages.length || index < 0) return;
+    if(index >= port.currentVoyages.length || index < 0) return null;
     Voyage voyage = port.currentVoyages[index];
     bool isSucces = _random.nextInt(voyage.successThreshold) <= _calculateFleetBasePoints();
 
     Map<VoyageShipType, int> newVoyageShips = Map.from(port.voyageShips);
+    Map<VoyageShipType,int> lostShips = {};
+    
     for(VoyageShipType type in port.voyageShips.keys){
       int returningShips = 0;
       for (var i = 0; i < (port.voyageShips[type] ?? 0); i++) {
         if( _random.nextDouble() <= (type.returnRate / (isSucces ? 1 : 2))) returningShips++;
       }
+      lostShips[type] = port.voyageShips[type]! - returningShips;
       newVoyageShips[type] = returningShips;
     }
 
     if(isSucces) addRecources(recources: port.currentVoyages[index].recources);
     
-    // Replace the voyage port with updated ships and regenerate voyages
     int portIndex = buildings.indexOf(port);
     VoyagePort newPort = port.copyWith(voyageShips: newVoyageShips);
     List<Building> newBuildings = List.from(buildings);
@@ -191,6 +191,11 @@ Map<ResourceType, int> _calculateVoyageResources({
     buildings = newBuildings;
     
     reRollVoyages();
+    return VoyageResult(
+      isSucces: isSucces, 
+      resourcesGained: port.currentVoyages[index].recources, 
+      lostShips: lostShips
+    );
   }
 
 }

@@ -27,6 +27,7 @@ extension PlayerMapperFromStateOpperator on PlayerMapper  {
       maxHaggleGain: offerState.maxHaggleGain, 
       canHaggle: offerState.canHaggle, 
       patience: offerState.patience,
+      isFailed: offerState.isFailed,
     );
   }
 

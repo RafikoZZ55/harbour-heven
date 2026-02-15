@@ -10,6 +10,7 @@ import 'package:harbour_heven/data/model/enum/building_type.dart';
 import 'package:harbour_heven/data/model/enum/resource_type.dart';
 import 'package:harbour_heven/data/model/enum/voyage_ship_type.dart';
 import 'package:harbour_heven/data/model/player/player.dart';
+import 'package:harbour_heven/data/model/voyage/voyage_result.dart';
 import 'package:harbour_heven/data/providers/player/mapper/player_mapper.dart';
 import 'package:hive_flutter/adapters.dart';
 
@@ -45,7 +46,7 @@ class PlayerController extends StateNotifier<Player> {
 
   void _startAutoSave() {
     _autoSaveTimer = Timer.periodic(
-      const Duration(minutes: 1),
+      const Duration(seconds: 17),
       (_) => _save(),
     );
   }
@@ -61,7 +62,6 @@ class PlayerController extends StateNotifier<Player> {
     if (tradingPort.nextRefreshAt <= now) {
       player.generateOffers();
       
-      // Update trading port with new nextRefreshAt time after generating offers
       TradingPort updatedPort = player.buildings.firstWhere((b) => b.type == BuildingType.tradingPort) as TradingPort;
       int portIndex = player.buildings.indexOf(updatedPort);
       TradingPort refreshedPort = updatedPort.copyWith(
@@ -76,7 +76,6 @@ class PlayerController extends StateNotifier<Player> {
     if (voyagePort.nextRefreshAt <= now) {
       player.generateVoyages();
       
-      // Update voyage port with new nextRefreshAt time after generating voyages
       VoyagePort updatedPort = player.buildings.firstWhere((b) => b.type == BuildingType.voyagePort) as VoyagePort;
       int portIndex = player.buildings.indexOf(updatedPort);
       VoyagePort refreshedPort = updatedPort.copyWith(
@@ -126,10 +125,6 @@ class PlayerController extends StateNotifier<Player> {
     return PlayerMapper().fromState(playerState: saved);
   }
 
-  // ================= HELPERS =================
-  // Helper methods removed - all state mutations now happen through Player operators
-  // which properly create new instances for Riverpod detection
-
   // ================= ACTIONS =================
 
   void sellVoyageShip({required VoyageShipType voyageShipType}){
@@ -153,11 +148,12 @@ class PlayerController extends StateNotifier<Player> {
     _save();
   }
 
-  void performVoyage({required int index}) {
+  VoyageResult? performVoyage({required int index}) {
      Player player = state.copyWith();
-    player.performVoyage(index: index);
+    VoyageResult? voyageResult = player.performVoyage(index: index);
     state = player;
     _save();
+    return voyageResult;
   }
 
   void upgradeBuilding({required int index}) {

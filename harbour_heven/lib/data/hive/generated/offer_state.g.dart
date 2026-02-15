@@ -17,34 +17,37 @@ class OfferStateAdapter extends TypeAdapter<OfferState> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return OfferState(
-      type: fields[1] as String,
-      reward: (fields[2] as Map).cast<String, int>(),
-      price: (fields[3] as Map).cast<String, int>(),
-      isCompleted: fields[4] as bool,
-      maxHaggleGain: fields[6] as int,
-      canHaggle: fields[5] as bool,
-      patience: fields[7] as double,
+      type: fields[0] as String,
+      reward: (fields[1] as Map).cast<String, int>(),
+      price: (fields[2] as Map).cast<String, int>(),
+      isCompleted: fields[3] as bool,
+      maxHaggleGain: fields[5] as int,
+      canHaggle: fields[4] as bool,
+      patience: fields[6] as double,
+      isFailed: fields[7] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, OfferState obj) {
     writer
-      ..writeByte(7)
-      ..writeByte(1)
+      ..writeByte(8)
+      ..writeByte(0)
       ..write(obj.type)
-      ..writeByte(2)
+      ..writeByte(1)
       ..write(obj.reward)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.price)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.isCompleted)
-      ..writeByte(5)
+      ..writeByte(4)
       ..write(obj.canHaggle)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.maxHaggleGain)
+      ..writeByte(6)
+      ..write(obj.patience)
       ..writeByte(7)
-      ..write(obj.patience);
+      ..write(obj.isFailed);
   }
 
   @override

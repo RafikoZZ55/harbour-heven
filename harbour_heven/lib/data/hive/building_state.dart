@@ -12,14 +12,12 @@ class BuildingState {
   @HiveField(1)
   String type;
 
-  //voyage_port
   @HiveField(2)
   List<VoyageState>? currentVoyages;
 
   @HiveField(3)
   Map<String, int>? voyageShips;
 
-  //trading_port
   @HiveField(4)
   double? reputation;
 

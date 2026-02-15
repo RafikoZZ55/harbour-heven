@@ -5,26 +5,29 @@ part 'generated/offer_state.g.dart';
 
 @HiveType(typeId: 2)
 class OfferState {
-  @HiveField(1)
+  @HiveField(0)
   final String type;
 
-  @HiveField(2)
+  @HiveField(1)
   final Map<String, int> reward;
 
-  @HiveField(3)
+  @HiveField(2)
   Map<String,int> price;
 
-  @HiveField(4)
+  @HiveField(3)
   bool isCompleted;
 
-  @HiveField(5)
+  @HiveField(4)
   bool canHaggle;
 
-  @HiveField(6)
+  @HiveField(5)
   final int maxHaggleGain;
 
-  @HiveField(7)
+  @HiveField(6)
   double patience;
+
+  @HiveField(7)
+  bool isFailed;
 
 
   OfferState({
@@ -34,6 +37,7 @@ class OfferState {
     required this.isCompleted,
     required this.maxHaggleGain,
     required this.canHaggle,
-    required this.patience
+    required this.patience,
+    required this.isFailed,
   });
 }

@@ -8,6 +8,7 @@ class Offer {
   Map<ResourceType,int> price;
   bool isCompleted;
   bool canHaggle;
+  bool isFailed;
   final int maxHaggleGain;
   double patience;
 
@@ -19,7 +20,8 @@ class Offer {
     required this.isCompleted,
     required this.maxHaggleGain,
     required this.canHaggle,
-    required this.patience
+    required this.patience,
+    required this.isFailed,
   });
 
 
@@ -28,6 +30,7 @@ class Offer {
     Map<ResourceType, int>? reward,
     Map<ResourceType,int>? price,
     bool? isCompleted,
+    bool? isFailed,
     int? maxHaggleGain,
     bool? canHaggle,
     double? patience
@@ -39,7 +42,8 @@ class Offer {
       isCompleted: isCompleted ?? this.isCompleted, 
       maxHaggleGain: maxHaggleGain ?? this.maxHaggleGain, 
       canHaggle: canHaggle ?? this.canHaggle, 
-      patience: patience ?? this.patience
+      patience: patience ?? this.patience,
+      isFailed: isFailed ?? this.isFailed,
     );
   }
 }

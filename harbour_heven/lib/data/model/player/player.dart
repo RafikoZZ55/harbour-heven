@@ -17,6 +17,8 @@ import 'package:harbour_heven/data/model/building/trading_port.dart';
 import 'package:harbour_heven/data/model/enum/offer_type.dart';
 import 'dart:math';
 
+import 'package:harbour_heven/data/model/voyage/voyage_result.dart';
+
 part 'operators/player_building_operator.dart';
 part 'operators/player_offer_operator.dart';
 part 'operators/player_recources_operator.dart';
