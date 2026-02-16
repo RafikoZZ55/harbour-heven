@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:harbour_heven/data/model/building/trading_port.dart';
 import 'package:harbour_heven/data/providers/player/player_controller.dart';
 import 'package:harbour_heven/data/providers/player/player_provider.dart';
 import 'package:harbour_heven/views/offer_offer_view.dart';
@@ -17,10 +20,38 @@ enum OfferViews {offers, tradingPortStatistics}
 class _OfferViewState extends ConsumerState<OfferView> {
   OfferViews? _selectedOfferViewBtn;
   Widget?  _selectedOfferView;
+  Timer? _timer;
+  String _formattedTime = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      final int nextRefreshAt = ref.watch(playerProvider.select(
+        (p) => p.buildings.whereType<TradingPort>().first.nextRefreshAt
+      ));
+      final int currentDate = DateTime.now().millisecondsSinceEpoch;
+      final int elapsed = nextRefreshAt - currentDate;
+      final int hours = elapsed ~/ (1000 * 60 *60);
+      final int minutes = elapsed ~/ (1000 * 60) % 60;
+      final int seconds = elapsed ~/ (1000) % 60;
+
+      setState(() {
+        _formattedTime = "${hours}h ${minutes}m ${seconds}s";
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    PlayerController playerController = ref.read(playerProvider.notifier);
-
+    final PlayerController playerController = ref.read(playerProvider.notifier);
+    final scheme = Theme.of(context).colorScheme;
     _selectedOfferViewBtn ??= OfferViews.offers;
     if(_selectedOfferViewBtn == OfferViews.offers) {_selectedOfferView = OfferOfferView();}
     else {_selectedOfferView = OfferReputationView();}
@@ -60,6 +91,21 @@ class _OfferViewState extends ConsumerState<OfferView> {
             )
           ],
         ),
+
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              "  Next refresh: $_formattedTime",
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: 12.5,
+                color: scheme.primary,
+                fontWeight: FontWeight.bold
+              ),
+              ),
+          ),
+          const SizedBox(height: 12),       
 
         Expanded(
           child: AnimatedSwitcher(

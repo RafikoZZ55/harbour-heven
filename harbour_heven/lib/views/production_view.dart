@@ -16,7 +16,6 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
   @override
   Widget build(BuildContext context) {
     final PlayerController playerController = ref.read(playerProvider.notifier);
-    final ColorScheme scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -41,9 +40,9 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
               height: 200,
               child: Center(
                 child: Text(
-                   "Fish",
+                   "🐟",
                     style: const TextStyle(
-                      fontSize: 35,
+                      fontSize: 100,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
@@ -71,9 +70,9 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
               height: 200,
               child: Center(
                 child: Text(
-                   "Wood",
+                   "🌳",
                     style: const TextStyle(
-                      fontSize: 35,
+                      fontSize: 100,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
@@ -101,9 +100,9 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
               height: 200,
               child: Center(
                 child: Text(
-                   "Stone",
+                   "🪨",
                     style: const TextStyle(
-                      fontSize: 35,
+                      fontSize: 100,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),

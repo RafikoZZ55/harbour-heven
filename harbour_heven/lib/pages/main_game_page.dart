@@ -18,6 +18,7 @@ class _MainGamePageState extends ConsumerState<MainGamePage> {
     return Scaffold(
       appBar: MainGameBar(),
       body: DefaultTabController(
+        initialIndex: 1,
         length: 4,
         child: Column(
           children: const [
@@ -27,7 +28,7 @@ class _MainGamePageState extends ConsumerState<MainGamePage> {
                   OfferView(),
                   TownView(),
                   VoyageView(),
-                  ProductionView()
+                  ProductionView(),
                 ],
               ),
             ),
@@ -36,7 +37,7 @@ class _MainGamePageState extends ConsumerState<MainGamePage> {
                 Tab(text: "Trade"),
                 Tab(text: "Town"),
                 Tab(text: "voyage"),
-                Tab(text: "Produce",)
+                Tab(text: "Produce"),
               ],
             ),
           ],

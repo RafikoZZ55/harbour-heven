@@ -59,13 +59,13 @@ Map<ResourceType, int> _calculateVoyageResources({
 }) {
   int voyagePortLevel = _getVoyagePort().level;
 
-  int baseResources = 100 +
-      200 * voyagePortLevel +
-      250 * (difficulty.index + 1) +
+  int baseResources = 25 +
+      85 * voyagePortLevel +
+      150 * (difficulty.index + 1) +
       _random.nextInt(
           (12.5 * pow(2, (difficulty.index + 1)) * voyagePortLevel).toInt());
 
-  int fixedBonus = 100 * (difficulty.index + 1) + 75 * voyagePortLevel;
+  int fixedBonus = 50 * (difficulty.index + 1) + 25 * voyagePortLevel;
 
   Map<ResourceType, int> resources = {};
   int numResources = voyageType.resources.length;
@@ -96,7 +96,7 @@ Map<ResourceType, int> _calculateVoyageResources({
 
   int _calculateVoyageSuccesThreshold({required DifficultyType difficulty}){
       int tawernLevel = buildingLevel(buildingType: BuildingType.tawern);
-      return 250 + 225 * tawernLevel + 100 * pow(2, difficulty.index + 1).toInt();
+      return (225 + 200 * tawernLevel + 75 * pow(2, difficulty.index + 1).toInt() + 250 * Random().nextDouble()).toInt();
       
   }
 
@@ -117,10 +117,12 @@ Map<ResourceType, int> _calculateVoyageResources({
     List<Voyage> voyages = List.generate(_calculateVoyageQueeSize(), (_) => _generateVoyage());
     
     int portIndex = buildings.indexOf(port);
-    VoyagePort newPort = port.copyWith(currentVoyages: voyages);
+    VoyagePort newPort = port.copyWith(currentVoyages: voyages, nextRefreshAt: DateTime.now().millisecondsSinceEpoch + Duration(hours: 1).inMilliseconds);
     List<Building> newBuildings = List.from(buildings);
     newBuildings[portIndex] = newPort;
     buildings = newBuildings;
+
+
   }
 
   void reRollVoyages(){

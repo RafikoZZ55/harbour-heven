@@ -8,13 +8,13 @@ extension PlayerOfferOperator on Player {
 
   double _calculateOfferMultiplier() {
     TradingPort tradingPort = _getTradingPort();
-    return 1.0 + (tradingPort.level * 0.05) + (tradingPort.reputation * 1);
+    return 1.0 + (tradingPort.level * 0.05) + tradingPort.reputation * 2;
   }
 
   int _calculateRewardSize(){
-    int baseReward = 100 + 100 * (buildingLevel(buildingType: BuildingType.tradingPort));
-    int bonus = Random().nextInt((baseReward/4).toInt()); 
-    return ((baseReward + bonus) * _getTradingPort().reputation).toInt();
+    int baseReward = 50 + 25 * (buildingLevel(buildingType: BuildingType.tradingPort));
+    int bonus = Random().nextInt((baseReward/8).toInt()); 
+    return (baseReward + bonus);
   }
 
   int _claculeteOfferQueeSize(){
@@ -25,15 +25,17 @@ extension PlayerOfferOperator on Player {
     final int size = (_calculateRewardSize() * _calculateOfferMultiplier()).toInt();
     final tawernLevel = buildingLevel(buildingType: BuildingType.tawern);
     int recourceAmount;
+
     Map<ResourceType,int> rewards = {};
+
     for(ResourceType recourceType in offerType.rewardType){ rewards[recourceType] = 0;}
     int remainig = size;
 
     while(remainig > 0){
       for (final ResourceType type in offerType.rewardType) {
         switch(type){
-          case ResourceType.gold: recourceAmount = 50 + 5 * _random.nextInt(tawernLevel);
-          default: recourceAmount = 100 + 10 * _random.nextInt(tawernLevel);
+          case ResourceType.gold: recourceAmount = 10 + 5 * _random.nextInt(tawernLevel);
+          default: recourceAmount = 35 + 10 * _random.nextInt(tawernLevel);
         }
 
         rewards[type] = (rewards[type] ?? 0) + min(recourceAmount, remainig);
@@ -46,17 +48,18 @@ extension PlayerOfferOperator on Player {
 
   Map<ResourceType,int> _claculateOfferPrice({required OfferType offerType}) {
     final int price;
-    final ResourceType recourceType = ResourceType.values[_random.nextInt(ResourceType.values.length)];
+    final List<ResourceType> priceTypes = offerType.priceType.toList();
+    final ResourceType recourceType = priceTypes[Random().nextInt(priceTypes.length)];
     switch(recourceType){
-      case ResourceType.gold: price = (_calculateRewardSize() * 0.85 / 4).toInt();
-      default: price = (_calculateRewardSize() * 0.85 / 4).toInt();
+      case ResourceType.gold: price = (_calculateRewardSize() / 2).toInt();
+      default: price = (_calculateRewardSize() * 2).toInt();
     }
     return {recourceType: price};
   }
 
   Offer _generateOffer() {
     final OfferType offerType = OfferType.getRandom();
-    final int maxHaggleGain = (_calculateRewardSize() * 0.125 * _getTradingPort().reputation).toInt();
+    final int maxHaggleGain = (_calculateRewardSize() * 0.175 * ( 1 + _getTradingPort().reputation)).toInt();
 
     return Offer(
       type: offerType,
@@ -74,7 +77,7 @@ extension PlayerOfferOperator on Player {
     final port = _getTradingPort();
     List<Offer> offers = List.generate(_claculeteOfferQueeSize(), (_) => _generateOffer());
     int portIndex = buildings.indexOf(port);
-    TradingPort newPort = port.copyWith(currentOffers: offers);
+    TradingPort newPort = port.copyWith(currentOffers: offers, nextRefreshAt: DateTime.now().millisecondsSinceEpoch + Duration(hours: 1).inMilliseconds);
     List<Building> newBuildings = List.from(buildings);
     newBuildings[portIndex] = newPort;
     buildings = newBuildings;

@@ -33,13 +33,16 @@ class MainGameBar extends ConsumerWidget implements PreferredSizeWidget {
       bottom: PreferredSize(
         preferredSize: preferredSize, 
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
           child: Wrap(
+            spacing: 4,
             children: player.resources.entries.map(
               (r) => Text(
                 "${r.key.icon}: ${r.value}/ ${player.calculateCapacity(resourceType: r.key)}  ",
                 style: TextStyle(
-                  color: scheme.onPrimary
+                  color: scheme.onPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold
                 ),
               )
             ).toList(),
@@ -51,5 +54,5 @@ class MainGameBar extends ConsumerWidget implements PreferredSizeWidget {
   }
   
   @override
-  Size get preferredSize => Size(double.infinity, 70);
+  Size get preferredSize => Size(double.infinity, 75);
 }

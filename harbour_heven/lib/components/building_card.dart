@@ -32,9 +32,9 @@ class _BuildingCardState extends ConsumerState<BuildingCard> {
       if (!mounted) return;
 
       setState(() {
-        final Player player = ref.read(playerProvider);
+        final int lastTickAt = ref.watch(playerProvider.select((p) => p.lastTickAt));
         int current = DateTime.now().millisecondsSinceEpoch;
-        int elapsed = current - player.lastTickAt;
+        int elapsed = current - lastTickAt;
         int total = PlayerController.tickTimeInMilliseconds;
         progres = (elapsed / total).clamp(0.0, 1.0);
       });

@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:harbour_heven/components/build_section_card.dart';
 
 class InfoPage extends StatelessWidget {
   const InfoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Game Guide"),
+        titleTextStyle: TextStyle(
+          color: scheme.onPrimary,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        iconTheme: IconThemeData(
+          color: scheme.onPrimary,
+        ),
+        backgroundColor: scheme.primary,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -17,8 +26,7 @@ class InfoPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            _buildSectionCard(
-              theme,
+            BuildSectionCard(
               icon: Icons.anchor,
               title: "What is Harbour Heven?",
               content:
@@ -30,8 +38,7 @@ class InfoPage extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            _buildSectionCard(
-              theme,
+            BuildSectionCard(
               icon: Icons.directions_boat,
               title: "Voyages",
               content:
@@ -44,8 +51,7 @@ class InfoPage extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            _buildSectionCard(
-              theme,
+            BuildSectionCard(
               icon: Icons.sailing,
               title: "Ships & Strategy",
               content:
@@ -57,8 +63,7 @@ class InfoPage extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            _buildSectionCard(
-              theme,
+            BuildSectionCard(
               icon: Icons.factory,
               title: "Production",
               content:
@@ -68,56 +73,13 @@ class InfoPage extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            _buildSectionCard(
-              theme,
+            BuildSectionCard(
               icon: Icons.info_outline,
               title: "Beta Information",
               content:
                   "Harbour Heven is currently in beta.\n\n"
                   "Balance and systems may change. "
                   "Your feedback helps shape the future of the game.",
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSectionCard(
-    ThemeData theme, {
-    required IconData icon,
-    required String title,
-    required String content,
-  }) {
-    return Card(
-      elevation: 6,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-
-            Row(
-              children: [
-                Icon(icon, color: theme.colorScheme.primary),
-                const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 12),
-
-            Text(
-              content,
-              style: theme.textTheme.bodyMedium,
             ),
           ],
         ),
