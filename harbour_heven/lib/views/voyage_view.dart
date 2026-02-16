@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:harbour_heven/components/voyage_card.dart';
-import 'package:harbour_heven/components/voyage_ship_card.dart';
-import 'package:harbour_heven/data/model/building/voyage_port.dart';
 import 'package:harbour_heven/data/providers/player/player_controller.dart';
 import 'package:harbour_heven/data/providers/player/player_provider.dart';
+import 'package:harbour_heven/views/voyage_ships_view.dart';
+import 'package:harbour_heven/views/voyage_voyage_view.dart';
 
 class VoyageView extends ConsumerStatefulWidget {
   const VoyageView({ super.key });
@@ -13,13 +12,24 @@ class VoyageView extends ConsumerStatefulWidget {
   createState() => _VoyageViewState();
 }
 
+enum SelectionButtons { ships, voyages}
+
 class _VoyageViewState extends ConsumerState<VoyageView> {
+  SelectionButtons? _selectedButton;
+  Widget? _selectedWiget;
+
   @override
   Widget build(BuildContext context) {
-    VoyagePort voyagePort = ref.watch(playerProvider.select(
-      (e) => e.buildings.whereType<VoyagePort>().first
-    ));
+
     PlayerController playerController = ref.read(playerProvider.notifier);
+
+    _selectedButton ??= SelectionButtons.voyages;
+    if(_selectedButton == SelectionButtons.ships){
+      _selectedWiget = VoyageShipsView();
+    }
+    else if(_selectedButton == SelectionButtons.voyages){
+      _selectedWiget = VoyageVoyageView();
+    }
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -28,16 +38,35 @@ class _VoyageViewState extends ConsumerState<VoyageView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Voyages",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+             
+              FilledButton(onPressed: () => playerController.reRollVoyages(), child: Text("Re-roll 🪙: -5")),
+
+              SizedBox(
+                width: 225,
+                child: SegmentedButton<SelectionButtons>(
+                segments: [
+                  ButtonSegment(
+                    value: SelectionButtons.ships,
+                    label: Text("Ships")
+                  ),
+                  ButtonSegment(
+                    value: SelectionButtons.voyages,
+                    label: Text("Voyages")
+                  ),
+                ], 
+                selected: {_selectedButton!},
+                onSelectionChanged: ( Set<SelectionButtons> s) {
+                  setState(() {
+                    _selectedButton = s.first;
+                    if(_selectedButton == SelectionButtons.ships){
+                      _selectedWiget = VoyageShipsView();
+                    }
+                    else if(_selectedButton == SelectionButtons.voyages){
+                      _selectedWiget = VoyageVoyageView();
+                    }
+                  });
+                },
               ),
-              FilledButton(
-                onPressed: () => playerController.reRollVoyages(),
-                child: const Text("Re-roll voyages -5 gold"),
               )
             ],
           ),
@@ -45,33 +74,11 @@ class _VoyageViewState extends ConsumerState<VoyageView> {
           const SizedBox(height: 12),
 
           Expanded(
-            child: ListView(
-              children: [
-                ...voyagePort.voyageShips.entries.map(
-                  (e) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: VoyageShipCard(voyageShipType: e.key),
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-                const Divider(),
-                const SizedBox(height: 16),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: voyagePort.currentVoyages.length,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemBuilder: (context, index) =>
-                      VoyageCard(index: index),
-                ),
-              ],
-            ),
+            child: AnimatedSwitcher(
+              duration:  Duration(milliseconds: 250),
+              child: _selectedWiget,
+              
+            )
           ),
         ],
       ),

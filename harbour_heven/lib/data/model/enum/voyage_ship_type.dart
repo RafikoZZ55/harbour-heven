@@ -3,7 +3,7 @@ import 'package:harbour_heven/data/model/enum/resource_type.dart';
 enum VoyageShipType {
   lightShip(
     description: "light, fast and cheap but has low chance of surviving a voyage",
-    returnRate: 0.75,
+    returnRate: 0.85,
     basePoints: 100,
     buyPrice: <ResourceType, int>{ResourceType.wood: 75, ResourceType.fish: 25},
     sellPrice: <ResourceType, int>{ResourceType.wood: 25, ResourceType.fish: 15},

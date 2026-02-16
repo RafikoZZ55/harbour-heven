@@ -114,7 +114,7 @@ class _BuildingCardState extends ConsumerState<BuildingCard> {
               runSpacing: 4,
               children: building.upgradeCost().entries.map((entry) {
                 return Chip(
-                  label: Text('${entry.key.name}: ${entry.value}'),
+                  label: Text('${entry.key.icon}: ${entry.value}'),
                   backgroundColor: scheme.secondaryContainer,
                   labelStyle: TextStyle(
                     color: scheme.onSecondaryContainer,

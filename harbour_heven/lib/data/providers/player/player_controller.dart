@@ -21,7 +21,7 @@ class PlayerController extends StateNotifier<Player> {
   Timer? _autoSaveTimer;
 
   bool _initialized = false;
-  static const int tickTimeInMilliseconds = 1 * 1000 * 15;
+  static const int tickTimeInMilliseconds = 1 * 1000 * 10;
 
   // ================= INIT =================
   Future<void> init() async {

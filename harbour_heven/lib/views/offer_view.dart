@@ -31,13 +31,13 @@ class _OfferViewState extends ConsumerState<OfferView> {
             Text(
               "Trading Port",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             FilledButton(
               onPressed: () => playerController.reRollOffers(),
-              child: Text("Re-roll -5 gold"))
+              child: Text("Re-roll 🪙: -5"))
           ],
         ),
 

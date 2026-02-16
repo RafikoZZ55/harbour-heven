@@ -23,6 +23,11 @@ class _OfferCardState extends ConsumerState<OfferCard> {
         if(offer.isFailed) {return "Failed";}
         else {return "Trade";}
       }
+      Color _getBorderColor(Offer offer){
+        if(offer.isFailed) {return Colors.red;}
+        if(offer.isCompleted) {return Colors.green;}
+        else {return Colors.transparent;}
+      }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +45,10 @@ return Card(
   elevation: 6,
   shape: RoundedRectangleBorder(
     borderRadius: BorderRadius.circular(16),
+    side: BorderSide(
+      color: _getBorderColor(offer), 
+      width: 2.5
+    )
   ),
   child: Padding(
     padding: const EdgeInsets.all(16),

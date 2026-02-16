@@ -119,14 +119,17 @@ class _VoyageCardState extends ConsumerState<VoyageCard> {
               child: FilledButton(
                 onPressed: () {
                 final VoyageResult? voyageResult = playerController.performVoyage(index: widget.index);
-                if(voyageResult == null) return;
+                if(voyageResult == null || !voyagePort.voyageShips.values.any((e) => e > 0)) return;
                 
                 showDialog(
+                  animationStyle: AnimationStyle(
+                    duration: Duration(milliseconds: 250)
+                  ),
                   context: context, 
                   builder: (context) =>  VoyageResultDialog(voyageResult: voyageResult),
                 );
                 },
-                child: const Text("Perform Voyage"),
+                child: Text((voyagePort.voyageShips.values.any((e) => e > 0)) ? "Perform Voyage" : "Buy ships"),
               ),
             ),
           ],
