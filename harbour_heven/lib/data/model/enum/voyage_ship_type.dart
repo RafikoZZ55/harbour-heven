@@ -2,21 +2,21 @@ import 'package:harbour_heven/data/model/enum/resource_type.dart';
 
 enum VoyageShipType {
   lightShip(
-    description: "light, fast and cheap but has low chance of surviving a voyage",
+    description: "Fast and cheap, but fragile. Low survival chance on long voyages.",
     returnRate: 0.85,
     basePoints: 100,
     buyPrice: <ResourceType, int>{ResourceType.wood: 75, ResourceType.fish: 25},
     sellPrice: <ResourceType, int>{ResourceType.wood: 25, ResourceType.fish: 15},
   ),
   heavyShip(
-    description: "unsinkable and powerfull but pricy. Great for long runs",
+    description: "Durable and powerful. Expensive, but built for long expeditions.",
     returnRate: 1,
     basePoints: 125,
     buyPrice: <ResourceType,int>{ResourceType.wood: 200, ResourceType.fish: 50, ResourceType.gold: 20},
     sellPrice: <ResourceType,int>{ResourceType.wood: 100, ResourceType.fish: 25, ResourceType.gold: 5},
   ),
   barteringShip(
-    description: "doest fight, just transports cargo but be carfull to not add them to much cuz they can make you a bigger target",
+    description: "Carries cargo only. Boosts profit but makes your fleet vulnerable.",
     returnRate: 0.9,
     basePoints: -50,
     buyPrice: <ResourceType, int>{ResourceType.wood: 75, ResourceType.fish: 15, ResourceType.gold: 35},

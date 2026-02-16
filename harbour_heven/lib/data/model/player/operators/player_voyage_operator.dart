@@ -165,7 +165,7 @@ Map<ResourceType, int> _calculateVoyageResources({
 
   VoyageResult? performVoyage({required int index}){
     VoyagePort port = _getVoyagePort();
-    if(index >= port.currentVoyages.length || index < 0) return null;
+    if(index >= port.currentVoyages.length || index < 0 || _calculateFleetBasePoints() <= 0) return null;
     Voyage voyage = port.currentVoyages[index];
     bool isSucces = _random.nextInt(voyage.successThreshold) <= _calculateFleetBasePoints();
 

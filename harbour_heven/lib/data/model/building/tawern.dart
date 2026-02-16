@@ -9,7 +9,7 @@ class Tawern extends Building {
   Tawern({int? level}):
   super(
     level: level ?? 1,
-    description: "Taver incricces capacity of storage and letts you progres the game by making offers and voyages more valueble but olso more dangerous, olso increcces amount of recource generated iin produce tab",
+    description: "Boosts storage and makes offers and voyages more rewarding, but riskier. Increases production efficiency.",
     type: BuildingType.tawern,
     price: <ResourceType,int>{}
   );

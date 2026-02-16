@@ -19,7 +19,7 @@ class TradingPort extends Building {
   super(
     level: level ?? 1,
     type: BuildingType.tradingPort,
-    description: "Upgrading trading port will incrice the amount of offer in the Trade tab and the rawards that you get form trading, on top of that it will decrece the reputation loss form bad trades and incrrese amount of reputation gained for mduing good trades ",
+    description: "Adds more valuable trade offers and improves reputation gains while reducing losses from bad deals.",
     price: <ResourceType,int>{}
   );
   

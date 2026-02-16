@@ -24,7 +24,7 @@ class VoyagePort extends Building {
   super(
     level: level ?? 1,
     type: BuildingType.voyagePort,
-    description: "Voyage Port is responsable for amut of voyages you can choose form and amout of extra loot you can get from them",
+    description: "Determines how many voyages you can run and increases extra loot from them.",
     price: <ResourceType,int>{}
   );
   
