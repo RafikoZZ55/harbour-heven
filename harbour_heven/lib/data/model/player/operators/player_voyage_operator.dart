@@ -7,7 +7,7 @@ extension PlayerVoyageOperator on Player {
   }
 
   int _calculateVoyageQueeSize(){
-    return 2 + (2 * (_getVoyagePort().level / 3).floor());
+    return  1 + (_getVoyagePort().level.floor());
   }
 
   int _calculateFleetBasePoints(){
@@ -116,7 +116,6 @@ Map<ResourceType, int> _calculateVoyageResources({
     VoyagePort port = _getVoyagePort();
     List<Voyage> voyages = List.generate(_calculateVoyageQueeSize(), (_) => _generateVoyage());
     
-    // Replace the voyage port with new voyages
     int portIndex = buildings.indexOf(port);
     VoyagePort newPort = port.copyWith(currentVoyages: voyages);
     List<Building> newBuildings = List.from(buildings);

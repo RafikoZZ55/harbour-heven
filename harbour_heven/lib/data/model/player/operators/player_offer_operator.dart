@@ -103,7 +103,7 @@ extension PlayerOfferOperator on Player {
     List<Offer> updatedOffers = List.from(port.currentOffers);
     updatedOffers[index] = completedOffer;
 
-    TradingPort newPort = port.copyWith(currentOffers: updatedOffers);
+    TradingPort newPort = port.copyWith(currentOffers: updatedOffers, reputation: (port.reputation + 0.05).clamp(0, 1));
     int portIndex = buildings.indexOf(port);
     List<Building> newBuildings = List.from(buildings);
     newBuildings[portIndex] = newPort;
@@ -147,6 +147,13 @@ extension PlayerOfferOperator on Player {
       isCompleted: false,
       isFailed: true
     );
+
+    TradingPort newPort = _getTradingPort().copyWith(reputation: (_getTradingPort().reputation - 0.1).clamp(0, 1));
+    int tradingPortIndex = buildings.indexOf(_getTradingPort());
+    List<Building> newBuildings = List.from(buildings);
+    newBuildings[tradingPortIndex] = newPort;
+    buildings = newBuildings;
+
   } else {
     updatedOffer = offer.copyWith(
       patience: newPatience,

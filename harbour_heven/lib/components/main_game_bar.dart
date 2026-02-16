@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:harbour_heven/data/model/player/player.dart';
 import 'package:harbour_heven/data/providers/player/player_provider.dart';
+import 'package:harbour_heven/pages/info_page.dart';
 
 
 class MainGameBar extends ConsumerWidget implements PreferredSizeWidget {
@@ -25,7 +26,7 @@ class MainGameBar extends ConsumerWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          onPressed: (){}, 
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => InfoPage(),)), 
           icon: Icon(Icons.info),
         )
       ],
@@ -50,5 +51,5 @@ class MainGameBar extends ConsumerWidget implements PreferredSizeWidget {
   }
   
   @override
-  Size get preferredSize => Size(double.infinity, 60);
+  Size get preferredSize => Size(double.infinity, 70);
 }

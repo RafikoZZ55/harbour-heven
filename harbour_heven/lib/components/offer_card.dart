@@ -157,7 +157,7 @@ return Card(
                         child: CircularProgressIndicator(
                           value: offer.patience,
                           strokeWidth: 10,
-                          backgroundColor: sheme.secondary,
+                          backgroundColor: sheme.inversePrimary,
                         ),
                       ),
                     ],

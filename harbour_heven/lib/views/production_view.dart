@@ -16,7 +16,7 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
   @override
   Widget build(BuildContext context) {
     final PlayerController playerController = ref.read(playerProvider.notifier);
-
+    final ColorScheme scheme = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.all(12.0),
       child: Column(
@@ -24,8 +24,8 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
         spacing: 10,
         children: [
            Card(
-            color: const Color.fromARGB(255, 64, 114, 116),
-            elevation: 2,
+            color: const Color.fromARGB(255, 25, 183, 189),
+            elevation: 6,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
@@ -54,8 +54,8 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
           ),
 
           Card(
-            color: const Color.fromARGB(255, 131, 112, 56),
-            elevation: 2,
+            color: const Color.fromARGB(255, 59, 51, 27),
+            elevation: 6,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
@@ -84,8 +84,8 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
           ),
 
            Card(
-            color: const Color.fromARGB(255, 88, 87, 81),
-            elevation: 2,
+            color: const Color.fromARGB(255, 100, 100, 100),
+            elevation: 6,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
@@ -93,7 +93,7 @@ class _ProductionViewState extends ConsumerState<ProductionView> {
               borderRadius: BorderRadius.circular(14),
               onTap: () {
                 playerController.produceRecource(
-                  resourceType: ResourceType.gold,
+                  resourceType: ResourceType.stone,
                 );
               },
               child: SizedBox(
