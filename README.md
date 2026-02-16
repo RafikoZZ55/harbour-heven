@@ -1,6 +1,6 @@
-# ⚓ Harbour Heven
+# ⚓ Harbour Heaven
 
-Harbour Heven is a strategic idle harbour management game built with Flutter.
+Harbour Heaven is a strategic idle harbour management game built with Flutter.
 
 The game focuses on long-term planning, calculated risk, and passive progression. Players expand their harbour, manage fleets, send voyages, and grow their economy through strategic decisions rather than constant interaction.
 
@@ -8,7 +8,7 @@ The game focuses on long-term planning, calculated risk, and passive progression
 
 ## 📌 Overview
 
-Harbour Heven is designed as a slow-paced strategic experience where:
+Harbour Heaven is designed as a slow-paced strategic experience where:
 
 - Players check in once or twice per day
 - Decisions have long-term consequences
@@ -57,7 +57,9 @@ lib/
  ├── data/
  │    ├── model/
  │    ├── providers/
+ │    ├── hive/
  ├── pages/
+ ├── views/
  └── main.dart
 ```
 
@@ -77,7 +79,7 @@ The architecture separates UI, state management, and business logic to ensure sc
 
 ## 🧪 Project Status
 
-⚠️ Harbour Heven is currently in beta.
+⚠️ Harbour Heaven is currently in beta.
 
 Game systems, balance, and mechanics may change during development.
 
