@@ -8,7 +8,7 @@ class Quarry extends Generator{
   super(
     level: level ?? 1,
     type: BuildingType.quarry,
-    description: "a stone quarry that generates stone",
+    description: "Quarry lets you generate stone passively even if you`re offline, upgrading it will incricce mount of recources generated per cycle",
     recourcetype: ResourceType.stone,
     price: <ResourceType,int>{ResourceType.fish: 15}
   );

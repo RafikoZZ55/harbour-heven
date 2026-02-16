@@ -18,7 +18,7 @@ extension PlayerOfferOperator on Player {
   }
 
   int _claculeteOfferQueeSize(){
-    return 2 + (2* (_getTradingPort().level / 3).floor());
+    return  ( 1 + (_getTradingPort().level).floor());
   }
 
   Map<ResourceType,int> _calculateOfferRewards({required OfferType offerType}) {

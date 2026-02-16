@@ -8,7 +8,7 @@ class FishingDock extends Generator {
   super(
     level: level ?? 1, 
     type: BuildingType.fishingDock,
-    description: "basic description for a fishing dock",
+    description: "Fishing Dock is a building that passively generates fish even if you`re offline uprading it will incrice the amount of fish that is genereted per cycle ",
     price: <ResourceType,int>{ResourceType.fish: 10},
     recourcetype: ResourceType.fish
   );

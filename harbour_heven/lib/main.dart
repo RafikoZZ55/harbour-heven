@@ -4,7 +4,7 @@ import 'package:harbour_heven/data/hive/building_state.dart';
 import 'package:harbour_heven/data/hive/offer_state.dart';
 import 'package:harbour_heven/data/hive/player_state.dart';
 import 'package:harbour_heven/data/hive/voyage_state.dart';
-import 'package:harbour_heven/pages/game_main_page.dart';
+import 'package:harbour_heven/pages/main_game_page.dart';
 import 'package:hive_flutter/adapters.dart';
 void main() async {
   await Hive.initFlutter();
@@ -37,6 +37,7 @@ class _MainState extends ConsumerState<Main> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 0, 255, 76), 
@@ -45,7 +46,7 @@ class _MainState extends ConsumerState<Main> {
         ),
       ),
 
-      home: GameMainPage(),
+      home: MainGamePage(),
     );
   }
 }

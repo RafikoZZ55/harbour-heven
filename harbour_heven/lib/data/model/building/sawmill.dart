@@ -11,7 +11,7 @@ class Sawmill extends Generator {
   super(
     level: level ?? 1,
     type: BuildingType.sawmill,
-    description: "Place where you cut wood",
+    description: "Sawmill lets you passively generate resouces even if you`re offline, upgrading it will increcce amuont of resouces generated per cycle",
     recourcetype: ResourceType.wood,
     price: <ResourceType,int>{}
   );

@@ -55,8 +55,7 @@ class _BuildingCardState extends ConsumerState<BuildingCard> {
     final scheme = Theme.of(context).colorScheme;
 
     return Card(
-      elevation: 2,
-      color: scheme.surface,
+      elevation: 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
       ),
@@ -98,10 +97,23 @@ class _BuildingCardState extends ConsumerState<BuildingCard> {
                   ),
             ),
             const SizedBox(height: 12),
-            building is Generator ? LinearProgressIndicator(
-              value: progres,
-              minHeight: 7.5,
-            ):
+
+            building is Generator
+                ? TweenAnimationBuilder<double>(
+                    tween: Tween<double>(
+                      begin: 0,
+                      end: progres,
+                    ),
+                    duration: const Duration(milliseconds: 1100),
+                    curve: Curves.easeInOut,
+                    builder: (context, value, _) {
+                      return LinearProgressIndicator(
+                        value: value,
+                        minHeight: 7.5,
+                      );
+                    },
+                  )
+                : const SizedBox.shrink(),
 
             const SizedBox(height: 12),
             Text(
@@ -122,7 +134,9 @@ class _BuildingCardState extends ConsumerState<BuildingCard> {
                 );
               }).toList(),
             ),
+
             const SizedBox(height: 12),
+            
             Align(
               alignment: Alignment.centerRight,
               child: FilledButton(
