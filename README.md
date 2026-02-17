@@ -97,30 +97,3 @@ Artificial Intelligence tools (including large language models) were used during
 All architectural decisions, gameplay systems, and core implementation were designed and written by the project author.
 
 AI tools were used strictly as development assistance and not as a replacement for core development work.
-
----
-
-## 📄 License
-
-Copyright (c) 2026
-
-All rights reserved.
-
-This project and its source code are the intellectual property of the author.
-
-You may not copy, modify, distribute, sublicense, or use this project or its code without explicit written permission from the author.
-
-For licensing inquiries, please contact the repository owner.
-
----
-
-## ⚖️ Disclaimer
-
-This project is provided "as is", without warranty of any kind, express or implied.  
-The author shall not be held liable for any damages arising from the use of this software.
-
----
-
-## 📬 Contact
-
-For feedback, collaboration, or licensing requests, please open an issue on GitHub.
